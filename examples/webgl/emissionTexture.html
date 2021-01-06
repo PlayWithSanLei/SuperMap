@@ -1,0 +1,460 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <title>动态自发光纹理</title>
+    <link href="../../Build/Cesium/Widgets/widgets.css" rel="stylesheet">
+    <link href="./css/pretty.css" rel="stylesheet">
+    <script type="text/javascript" src="./js/jquery.min.js"></script>
+    <script src="./js/config.js"></script>
+    <script src="./js/tooltip.js"></script>
+    <script src="./js/spectrum.js"></script>
+    <script type="text/javascript" src="../../Build/Cesium/Cesium.js"></script>
+</head>
+
+<body>
+<div id="cesiumContainer"></div>
+<div class="params-setting-container">
+    <div class="params-setting-anchor" title="显示/隐藏参数面板"><span class="fui-expand"></span></div>
+    <div class="params-setting">
+        <div class="param-item">
+            <label for="bloomShow">开启泛光</label>
+            <input type="checkbox" id="bloomShow">
+        </div>
+        <div class="param-item">
+            <label>亮度阈值</label>
+            <input type="range" id="bloom-threshold" min="0" max="1" value="1" step="0.1" style="width: 140px">
+        </div>
+        <div class="param-item">
+            <label>泛光强度</label>
+            <input type="range" id="bloom-intensity" min="0" max="10" value="1" step="0.1" style="width: 140px">
+        </div>
+        <div class="param-item">
+            <label for="hdrShow">开启HDR</label>
+            <input type="checkbox" id="hdrShow">
+        </div>
+        <div class="param-item">
+            <label for="">开启夜景</label>
+            <input type="checkbox" id="startNight">
+        </div>
+    </div>
+</div>
+<script type="text/javascript">
+    function onload(Cesium) {
+        var viewer = new Cesium.Viewer('cesiumContainer', {
+            timeline: false
+        });
+        // viewer.imageryLayers.addImageryProvider(new Cesium.SingleTileImageryProvider({
+        //     url: './images/BlackMarble_2016.jpg'
+        // }));
+        //
+        // viewer.imageryLayers.addImageryProvider(new Cesium.BingMapsImageryProvider({
+        //     url: 'https://dev.virtualearth.net',
+        //     mapStyle: Cesium.BingMapsStyle.AERIAL,
+        //     key: URL_CONFIG.BING_MAP_KEY
+        // }));
+        var scene = viewer.scene;
+        scene.globe.show = true;
+        scene.sun.show = false;
+        viewer.scene.bloomEffect.show = false;
+        viewer.scene.hdrEnabled = false;
+        // scene.skyAtmosphere.brightnessShift = 0.4;
+        // scene.globe.enableLighting = true;
+        // scene.moon.show = false;
+
+        switchLight(true);
+
+        var directionalLight_1, directionalLight_2, directionalLight_3, directionalLight_4,
+            pointLight3, pointLight4, pointLight5, pointLight7, pointLight8
+
+        function switchLight(isDayLight) {
+            // directionalLight_1 && scene.removeLightSource(directionalLight_1)
+            // directionalLight_2 && scene.removeLightSource(directionalLight_2)
+            // directionalLight_3 && scene.removeLightSource(directionalLight_3)
+            // directionalLight_4 && scene.removeLightSource(directionalLight_4)
+            pointLight3 && scene.removeLightSource(pointLight3)
+            pointLight4 && scene.removeLightSource(pointLight4)
+            pointLight5 && scene.removeLightSource(pointLight5)
+            pointLight7 && scene.removeLightSource(pointLight7)
+            pointLight8 && scene.removeLightSource(pointLight8)
+            if (isDayLight) {
+                //设置环境光（白天）
+                scene.lightSource.ambientLightColor = new Cesium.Color(0.4, 0.4, 0.4, 1);
+                //添加光源
+                // 新增直射光1--西北侧光（左侧）
+                var position = new Cesium.Cartesian3.fromDegrees(106.282013734667, 29.7615756638933, 630);
+                var targetPosition1 = new Cesium.Cartesian3.fromDegrees(106.756840202248, 29.3980661015228, 500);
+                var dirLightOptions = {
+                    targetPosition: targetPosition1,
+                    color: new Cesium.Color(0.6, 0.6, 0.6, 1),
+                    intensity: 0.4
+                };
+                directionalLight_1 && scene.removeLightSource(directionalLight_1)
+                directionalLight_1 = new Cesium.DirectionalLight(position, dirLightOptions);
+                scene.addLightSource(directionalLight_1);
+                // 新增直射光1--西南侧光（右侧）
+                var position2 = new Cesium.Cartesian3.fromDegrees(106.756840202248, 29.3980661015228, 500);
+                var targetPosition2 = new Cesium.Cartesian3.fromDegrees(106.282013734667, 29.7615756638933, 630);
+                var dirLightOptions2 = {
+                    targetPosition: targetPosition2,
+                    color: new Cesium.Color(0.7, 0.7, 0.7, 1),
+                    intensity: 0.6
+                };
+                directionalLight_2 && scene.removeLightSource(directionalLight_2)
+                directionalLight_2 = new Cesium.DirectionalLight(position2, dirLightOptions2);
+                scene.addLightSource(directionalLight_2);
+
+                // 新增直射光1--南北光（正面光）
+                var position3 = new Cesium.Cartesian3.fromDegrees(106.452, 29.573, 1);
+                var targetPosition3 = new Cesium.Cartesian3.fromDegrees(106.454, 29.581, 91);
+                var dirLightOptions3 = {
+                    targetPosition: targetPosition3,
+                    color: new Cesium.Color(0.5, 0.5, 0.5, 1),
+                    intensity: 0.6
+                };
+                directionalLight_3 && scene.removeLightSource(directionalLight_3)
+                directionalLight_3 = new Cesium.DirectionalLight(position3, dirLightOptions3);
+                scene.addLightSource(directionalLight_3);
+
+                // 新增直射光1--顶光
+                var position4 = new Cesium.Cartesian3.fromDegrees(106.571378546495, 29.5603965436718, 1000);
+                var targetPosition4 = new Cesium.Cartesian3.fromDegrees(106.571378546495, 29.5603965436718, 10);
+                var dirLightOptions4 = {
+                    targetPosition: targetPosition4,
+                    color: new Cesium.Color(0.7, 0.7, 0.7, 1),
+                    intensity: 0.65
+                };
+                directionalLight_4 && scene.removeLightSource(directionalLight_4)
+                directionalLight_4 = new Cesium.DirectionalLight(position4, dirLightOptions4);
+                scene.addLightSource(directionalLight_4);
+            } else {
+                //设置环境光(夜晚)
+                scene.lightSource.ambientLightColor = new Cesium.Color(0.15, 0.15, 0.15, 1);
+
+                // 新增标识点光源-建筑1
+                var pointLightPos3 = new Cesium.Cartesian3.fromDegrees(106.571285893056, 29.560471562369, 360);
+                var pointLightOptions3 = {
+                    cutoffDistance: 2000,
+                    color: new Cesium.Color(0.6, 0.3, 0.1, 1.0),
+                    intensity: 1.5
+                };
+                pointLight3 && scene.removeLightSource(pointLight3)
+                pointLight3 = new Cesium.PointLight(pointLightPos3, pointLightOptions3);
+                scene.addLightSource(pointLight3);
+
+                // 新增标识点光源-建筑2
+                var pointLightPos4 = new Cesium.Cartesian3.fromDegrees(106.440835888168, 29.5860776240763, 200);
+                var pointLightOptions4 = {
+                    cutoffDistance: 2000,
+                    color: new Cesium.Color(0.9, 0.3, 0.3, 1.0),
+                    intensity: 2
+                };
+                pointLight4 && scene.removeLightSource(pointLight4)
+                pointLight4 = new Cesium.PointLight(pointLightPos4, pointLightOptions4);
+                scene.addLightSource(pointLight4);
+
+                // 新增标识点光源-建筑3
+                var pointLightPos5 = new Cesium.Cartesian3.fromDegrees(106.595770644757, 29.6701144056505, 200);
+                var pointLightOptions5 = {
+                    cutoffDistance: 3000,
+                    color: new Cesium.Color(0.6, 0.3, 0.1, 1.0),
+                    intensity: 2
+                };
+                pointLight5 && scene.removeLightSource(pointLight5)
+                pointLight5 = new Cesium.PointLight(pointLightPos5, pointLightOptions5);
+                scene.addLightSource(pointLight5);
+                // 新增标识点光源-建筑5
+                var pointLightPos7 = new Cesium.Cartesian3.fromDegrees(106.434327803494, 29.504044534872, 200);
+                var pointLightOptions7 = {
+                    cutoffDistance: 2000,
+                    color: new Cesium.Color(0.6, 0.6, 0.1, 1.0),
+                    intensity: 2
+                };
+                pointLight7 && scene.removeLightSource(pointLight7)
+                pointLight7 = new Cesium.PointLight(pointLightPos7, pointLightOptions7);
+                scene.addLightSource(pointLight7);
+
+                // 新增标识点光源-建筑6
+                var pointLightPos8 = new Cesium.Cartesian3.fromDegrees(106.596187330546, 29.4309579929797, 200);
+                var pointLightOptions8 = {
+                    cutoffDistance: 2000,
+                    color: new Cesium.Color(0.2, 0.6, 0.1, 1.0),
+                    intensity: 2
+                };
+                pointLight8 && scene.removeLightSource(pointLight8)
+                pointLight8 = new Cesium.PointLight(pointLightPos8, pointLightOptions8);
+                scene.addLightSource(pointLight8);
+                // 添加光源
+                // 新增直射光1--西南侧光
+                var position = new Cesium.Cartesian3.fromDegrees(106.437, 29.571, 71);
+                var targetPosition1 = new Cesium.Cartesian3.fromDegrees(106.436, 29.569, 1);
+                var dirLightOptions = {
+                    targetPosition: targetPosition1,
+                    color: new Cesium.Color(1, 1.54, 2.3, 1),
+                    intensity: 0.15
+                };
+                directionalLight_1 && scene.removeLightSource(directionalLight_1)
+                directionalLight_1 = new Cesium.DirectionalLight(position, dirLightOptions);
+                scene.addLightSource(directionalLight_1);
+
+                //新增直射光1--东北侧光
+                var position3 = new Cesium.Cartesian3.fromDegrees(106.452, 29.573, 1);
+                var targetPosition3 = new Cesium.Cartesian3.fromDegrees(106.454, 29.581, 91);
+                var dirLightOptions3 = {
+                    targetPosition: targetPosition3,
+                    color: new Cesium.Color(1, 2, 3, 1),
+                    intensity: 0.15
+                };
+                directionalLight_3 && scene.removeLightSource(directionalLight_3)
+                directionalLight_3 = new Cesium.DirectionalLight(position3, dirLightOptions3);
+                scene.addLightSource(directionalLight_3);
+                //新增直射光1--顶光
+                var position4 = new Cesium.Cartesian3.fromDegrees(106.492, 29.593, 100);
+                var targetPosition4 = new Cesium.Cartesian3.fromDegrees(106.492, 29.593, 10);
+                var dirLightOptions4 = {
+                    targetPosition: targetPosition4,
+
+                    color: new Cesium.Color(0.25, 0.25, 0.25, 1),
+                    intensity: 0.35
+                };
+                directionalLight_4 && scene.removeLightSource(directionalLight_4)
+                directionalLight_4 = new Cesium.DirectionalLight(position4, dirLightOptions4);
+                scene.addLightSource(directionalLight_4);
+                directionalLight_2 && scene.removeLightSource(directionalLight_2)
+            }
+        }
+
+        var promise = scene.open(URL_CONFIG.SCENE_CHONGQING_TX);
+        Cesium.when.all(promise, function (layers) {
+            //设置相机位置，定位至模型
+            scene.camera.setView({
+                destination: new Cesium.Cartesian3(-1584234.1130613836, 5326981.135751215, 3139896.3140030033),
+                orientation: {
+                    heading: 0.023770275120284623,
+                    pitch: -0.47877092800193255,
+                    roll: 6.283171325419627
+                }
+            });
+
+
+            var layer = scene.layers.find("CQmodel");
+
+            //修改线框
+            layer.style3D.lineWidth = 1.5;
+            layer.style3D.lineColor = new Cesium.Color(0 / 255, 0 / 255, 0 / 255, 1);
+            layer.style3D.fillStyle = Cesium.FillStyle.Fill_And_WireFrame;
+            layer.wireFrameMode = Cesium.WireFrameType.EffectOutline;
+
+            var hyp = new Cesium.HypsometricSetting();
+
+            //设置自发光纹理
+            function setHypsometric(layer) {
+                hyp.emissionTextureArray = [{
+                    url: "./images/纹理20.jpg",
+                    USpeed: 0.5,
+                    VSpeed: 0,
+                    UTiling: 50,
+                    VTiling: 50
+                },
+                    {
+                        url: "./images/纹理20.jpg",
+                        USpeed: 0.5,
+                        VSpeed: 0,
+                        UTiling: 60,
+                        VTiling: 60
+                    },
+                    {
+                        url: "./images/纹理2.jpg",
+                        USpeed: 0.5,
+                        VSpeed: 0,
+                        UTiling: 30,
+                        VTiling: 30
+                    },
+                    {
+                        url: "./images/纹理2.jpg",
+                        USpeed: 0.5,
+                        VSpeed: 0,
+                        UTiling: 20,
+                        VTiling: 20
+                    },
+                    {
+                        url: "./images/纹理20.jpg",
+                        USpeed: 0.5,
+                        VSpeed: 0,
+                        UTiling: 50,
+                        VTiling: 50
+                    },
+                    {
+                        url: "./images/纹理2.jpg",
+                        USpeed: 0.5,
+                        VSpeed: 0,
+                        UTiling: 30,
+                        VTiling: 30
+                    },
+                    //矮
+                    {
+                        url: "./images/纹理2.jpg",
+                        USpeed: 0.5,
+                        VSpeed: 0,
+                        UTiling: 20,
+                        VTiling: 20
+                    },
+                    {
+                        url: "./images/纹理17.jpg",
+                        USpeed: 0,
+                        VSpeed: 0,
+                        UTiling: 60,
+                        VTiling: 60
+                    },
+                    {
+                        url: "./images/纹理16.jpg",
+                        USpeed: 0,
+                        VSpeed: 0,
+                        UTiling: 60,
+                        VTiling: 60
+                    },
+                    {
+                        url: "./images/纹理15.jpg",
+                        USpeed: 0,
+                        VSpeed: 0,
+                        UTiling: 60,
+                        VTiling: 60
+                    }
+                ]
+                layer.hypsometricSetting = {
+                    hypsometricSetting: hyp,
+                }
+
+            };
+
+
+            //泛光开关
+            $("#bloomShow").on("input change", function () {
+                viewer.scene.bloomEffect.show = this.checked;
+                viewer.scene.bloomEffect.threshold = $("#bloom-threshold").val();
+                viewer.scene.bloomEffect.bloomIntensity = $("#bloom-intensity").val();
+            });
+            //泛光阈值
+            $("#bloom-threshold").on("input change", function () {
+                $("#bloom-threshold-label").text(this.value);
+                viewer.scene.bloomEffect.threshold = this.value;
+            });
+            //泛光强度
+            $("#bloom-intensity").on("input change", function () {
+                $("#bloom-intensity-label").text(this.value);
+                viewer.scene.bloomEffect.bloomIntensity = this.value;
+            });
+            //HDR开关
+            $("#hdrShow").on("input change", function () {
+                viewer.scene.hdrEnabled = this.checked;
+                viewer.scene.scanEffect.show = false;
+            });
+            $(".params-setting-anchor").click(function () {
+                $(".params-setting").toggleClass("params-setting-hide");
+            });
+
+            var imageLayer;
+            // 开启夜景
+            $("#startNight").on("input", function (e) {
+                if (!$(this).prop('checked')) {
+                    layer.hypsometricSetting = {
+                        hypsometricSetting: undefined,
+                    }
+                    layer.style3D.fillStyle = Cesium.FillStyle.Fill_And_WireFrame;
+                    // 刷新场景
+                    layer.refresh();
+                    scene.skyAtmosphere.show = true;
+                    viewer.scene.sun.show = true;
+                    viewer.scene.hdrEnabled = false;
+                    viewer.scene.bloomEffect.show = false;
+                    switchLight(true);//白天
+                    viewer.imageryLayers.remove(imageLayer);
+					$("#bloomShow").prop('checked', false);
+                    $("#hdrShow").prop('checked', false);
+                    return;
+                } else {
+                    switchLight(false);
+                    viewer.scene.hdrEnabled = true;
+                    viewer.scene.bloomEffect.show = true;
+                    viewer.scene.bloomEffect.threshold = 1;
+                    viewer.scene.bloomEffect.bloomIntensity = 0.8;
+                    scene.skyAtmosphere.show = false;
+                    viewer.scene.sun.show = false;
+					
+					$("#bloomShow").prop("checked",true);
+                    $("#hdrShow").prop("checked",true);
+
+                    setHypsometric(layer);//夜景
+                    imageLayer = viewer.imageryLayers.addImageryProvider(new Cesium.SingleTileImageryProvider({
+                        url: './images/BlackMarble_2016.jpg'
+                    }));
+
+                    // 关掉边框线
+                    layer.style3D.fillStyle = Cesium.FillStyle.Fill;
+                    // 刷新场景
+                    layer.refresh();
+                }
+            });
+        });
+
+        //加载线数据
+        var roadLine1 = Cesium.GeoJsonDataSource.load('./data/json/lineback_1.json');
+        roadLine1.then(function (dataSource) {
+            viewer.dataSources.add(dataSource);
+            var lines_1 = dataSource.entities.values;
+            for (var i = 0; i < lines_1.length; i++) {
+                var line = lines_1[i];
+                line.polyline.material = new Cesium.PolylineGlowMaterialProperty({ //设置Glow材质
+                    glowPower: 0.005,
+
+                    color: new Cesium.Color(8, 5, 0, 1)
+                });
+                line.polyline.width = 5;
+            }
+
+        }).otherwise(function (error) {
+            window.alert(error);
+        });
+
+        var roadLine2 = Cesium.GeoJsonDataSource.load('./data/json/lineback2_1.json');
+        roadLine2.then(function (dataSource) {
+            viewer.dataSources.add(dataSource);
+            var lines_2 = dataSource.entities.values;
+            for (var i = 0; i < lines_2.length; i++) {
+                var line = lines_2[i];
+                line.polyline.material = new Cesium.PolylineGlowMaterialProperty({ //设置Glow材质
+                    glowPower: 0.005,
+                    color: new Cesium.Color(8, 5, 0, 1)
+                });
+                line.polyline.width = 5;
+            }
+        }).otherwise(function (error) {
+            window.alert(error);
+        });
+
+        var roadLine3 = Cesium.GeoJsonDataSource.load('./data/json/lineback3_1.json');
+        roadLine3.then(function (dataSource) {
+            viewer.dataSources.add(dataSource);
+            var lines_3 = dataSource.entities.values;
+            for (var i = 0; i < lines_3.length; i++) {
+                var line = lines_3[i];
+                line.polyline.material = new Cesium.PolylineGlowMaterialProperty({ //设置Glow材质
+                    glowPower: 0.005,
+                    color: new Cesium.Color(8, 5, 0, 1)
+                });
+                line.polyline.width = 5;
+            }
+        }).otherwise(function (error) {
+            window.alert(error);
+        });
+    }
+
+    if (typeof Cesium !== 'undefined') {
+        window.startupCalled = true;
+        onload(Cesium);
+    }
+</script>
+</body>
+
+</html>

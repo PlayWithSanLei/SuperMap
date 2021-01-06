@@ -1,0 +1,104 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=Edge,chrome=1">
+    <meta name="viewport"
+          content="width=device-width, initial-scale=1, maximum-scale=1, minimum-scale=1, user-scalable=no">
+    <title>多子域</title>
+    <link href="../../Build/Cesium/Widgets/widgets.css" rel="stylesheet">
+    <link href="css/bootstrap.min.css" rel="stylesheet">
+    <link href="css/pretty.css" rel="stylesheet">
+    <script src="js/jquery.min.js"></script>
+    <script src="js/bootstrap.min.js"></script>
+    <script src="js/bootstrap-select.min.js"></script>
+    <script src="js/tooltip.js"></script>
+    <script src="js/config.js"></script>
+    <script src="js/Convert.js"></script>
+    <script type="text/javascript" src="../../Build/Cesium/Cesium.js"></script>
+</head>
+<body>
+<div id="cesiumContainer"></div>
+<div id="toolbar" class="param-container tool-bar">
+    <button id="terrain" class="button black">地形</button>
+    <button id="imageLayer" class="button black">影像</button>
+    <button id="s3m" class="button black">S3M</button>
+    <button id="mvt" class="button black">MVT</button>
+</div>
+<script>
+    function onload(Cesium) {
+
+        //地形支持多子域
+        var viewer = new Cesium.Viewer('cesiumContainer',{
+            terrainProvider:new Cesium.CesiumTerrainProvider({
+                url:'http://{s}/iserver/services/3D-SiChuanDiXingYingXiang/rest/realspace/datas/DatasetDEM',
+                isSct : true,
+                subdomains:['localhost:8081','localhost:8082','localhost:8083'],
+                invisibility:true
+            })
+        });
+
+        var scene = viewer.scene;
+        scene.debugShowFramesPerSecond = true;
+
+        $("#terrain").click(function(){
+            viewer.scene.camera.setView({
+                destination : new Cesium.Cartesian3(-1231161.921102158, 5398383.091137612, 3335815.270419448)
+            });
+        });
+
+        //影像支持多子域
+        $("#imageLayer").click(function(){
+            var imageLayer = viewer.imageryLayers.addImageryProvider(new Cesium.SuperMapImageryProvider({
+                url:"http://{s}/iserver/services/3D-SiChuanDiXingYingXiang/rest/realspace/datas/MosaicResult",
+                subdomains:['localhost:8081','localhost:8082','localhost:8083']
+            }));
+            viewer.flyTo(imageLayer);
+        });
+
+        //S3M支持多子域
+        $("#s3m").click(function(){
+            var promise = scene.open("http://{s}/iserver/services/3D-CBDCache20200416/rest/realspace",undefined,{
+                subdomains:['localhost:8081','localhost:8082','localhost:8083']
+            });
+            viewer.flyTo(promise);
+        });
+
+        //MVT支持多子域
+        $("#mvt").click(function(){
+           var mvtMap = scene.addVectorTilesMap({
+               url:"http://{s}/iserver/services/map-mvt-GLDZJSYDSPDKBZD/restjsr/v1/vectortile/maps/GL_DZ_JSYDSP_DKB_ZD",
+               subdomains:['localhost:8081','localhost:8082','localhost:8083'],
+               canvasWidth:512,
+               name:'testMVT',
+               viewer:viewer
+            });
+            //定位至图层范围
+            var layerReadyPromise = mvtMap.readyPromise;
+            Cesium.when(layerReadyPromise, function (data) {
+                var bounds = mvtMap.rectangle;
+                scene.camera.setView({
+                    destination: new Cesium.Cartesian3.fromRadians((bounds.east + bounds.west) * 0.5, (bounds.north + bounds.south) * 0.5, 10000),
+                    orientation: {
+                    heading: 0,
+                    roll: 0
+                    }
+                });
+
+               var mapboxStyle = mvtMap.mapboxStyle;
+               for (var id in mapboxStyle.layers) {
+                   var layer = mapboxStyle.layers[id];
+                   if(layer.type === "symbol"){
+                       mvtMap.setLayoutProperty(layer.id, 'text-max-width', 5);
+                   }
+               }
+            });
+        });
+    }
+    if (typeof Cesium !== 'undefined') {
+        window.startupCalled = true;
+        onload(Cesium);
+    }
+</script>
+</body>
+</html>

@@ -1,0 +1,71 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=Edge,chrome=1">
+    <meta name="viewport"
+          content="width=device-width, initial-scale=1, maximum-scale=1, minimum-scale=1, user-scalable=no">
+    <title>ArcGIS服务</title>
+    <link href="../../Build/Cesium/Widgets/widgets.css" rel="stylesheet">
+    <link href="css/bootstrap.min.css" rel="stylesheet">
+    <link href="css/pretty.css" rel="stylesheet">
+    <script src="js/jquery.min.js"></script>
+    <script src="js/bootstrap.min.js"></script>
+    <script src="js/bootstrap-select.min.js"></script>
+    <script src="js/tooltip.js"></script>
+    <script src="js/config.js"></script>
+    <script src="js/Convert.js"></script>
+    <script type="text/javascript" src="../../Build/Cesium/Cesium.js"></script>
+</head>
+<body>
+<div id="cesiumContainer"></div>
+<script>
+    function onload(Cesium) {
+        var viewer = new Cesium.Viewer('cesiumContainer', {});
+
+        varscene = viewer.scene;
+        // scene.debugShowFramesPerSecond = true;
+
+        var imageryLayers = viewer.imageryLayers;
+
+
+        // //方式一：通过ArcGisMapServerImageryProvideri接口，但不支持CGCS2000坐标系
+        // var layer = viewer.imageryLayers.addImageryProvider(new Cesium.ArcGisMapServerImageryProvider({
+        //     url: 'http://cache1.arcgisonline.cn/ArcGIS/rest/services/ChinaOnlineCommunity/MapServer'
+        // }));
+
+
+        //方式二：通过CGCS2000MapServerImageryProvideri接口，支持CGCS2000、WGS84、全球墨卡托等坐标系
+        var layer = viewer.imageryLayers.addImageryProvider(new Cesium.CGCS2000MapServerImageryProvider({
+            url: 'http://cache1.arcgisonline.cn/arcgis/rest/services/ChinaOnlineStreetPurplishBlue/MapServer',
+            // suggest: true,//4490坐标系，按照suggest切片方案切的瓦片,需要设置该参数
+        }));
+        
+        viewer.flyTo(layer);
+
+        // //方式三：通过WebMapTileServiceImageryProvider接口，构造WMTS地址
+        // var wmtsLayer = viewer.imageryLayers.addImageryProvider(new Cesium.WebMapTileServiceImageryProvider({
+        //     url: 'http://cache1.arcgisonline.cn/arcgis/rest/services/ChinaOnlineStreetPurplishBlue/MapServer/WMTS',
+        //     layer: 'ChinaOnlineStreetPurplishBlue',
+        //     format: "image/jpgpng",
+        //     style: 'default',
+        //     tileMatrixSetID: "default028mm",
+        // }));
+        // viewer.flyTo(wmtsLayer);
+
+
+        //全球剖分层级格网
+        var tile_lay = new Cesium.TileCoordinatesImageryProvider({});
+        imageryLayers.addImageryProvider(tile_lay);
+
+
+        $('#loadingbar').remove();
+    }
+
+    if (typeof Cesium !== 'undefined') {
+        window.startupCalled = true;
+        onload(Cesium);
+    }
+</script>
+</body>
+</html>

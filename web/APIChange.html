@@ -1,0 +1,933 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8"/>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=0"/>
+    <meta name="apple-mobile-web-app-capable" content="yes"/>
+    <title id="APIChange">接口变更</title>
+
+    <link rel="shortcut icon" type="image/x-icon" href="./img/favicon.ico"/>
+    <link rel="stylesheet" href="./css/develop.css">
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0,user-scalable=no">
+    <script type="text/javascript" include='isIntroduction,lazyload' src="./js/include.js"></script>
+    <script src=""></script>
+
+    <!--[if lte IE 8]>
+    <style>
+        .container .hero-unit {
+            background-position: right bottom;
+            background-image: url('examples/images/home_banner2.png');
+            background-repeat: no-repeat;
+            padding-left: 60px;
+            padding-right: 400px;
+            padding-top: 60px;
+            padding-bottom: 60px
+        }
+    </style>
+    <![endif]-->
+
+</head>
+<body class="hold-transition skin-blue">
+<!--顶部导航-->
+<header class="header-wrapper main-header icl-header"></header>
+<script>
+    var navigation = {
+        nav: {
+            title: 'SuperMap iClient3D for WebGL',
+            path: '../web/',
+            isLocal: window.isLocal
+        }
+    };
+    identification = {};
+    utils.loadTemplate('.icl-header', './template/header.html', navigation);
+</script>
+<!--顶部导航 end-->
+<div>
+    <div class="container " id="APIChange">
+        <div>
+            <h2 class="title" id="details2">产品变更信息</h2>
+            当前版本：10i(2020) SP1<br/>
+            上次版本：10i(2020)<br/>
+            <p class="lead"><strong>1. 接口变更： </strong></p>
+
+            <div align="center">
+                <table border="0" cellpadding="0" cellspacing="0" style="border-collapse:
+ collapse;width:1108px">
+                    <colgroup>
+                        <col width="226" style="width: 170pt">
+                        <col width="269" style="width: 202pt">
+                        <col width="562" style="width: 422pt">
+                    </colgroup>
+                    <tr height="22" style="height:16.5pt">
+                        <td height="22"
+                            style="height: 16.5pt; width: 261px; font-weight: 700; color: black; font-size: 11.0pt; font-style: normal; text-decoration: none; font-family: 微软雅黑, sans-serif; text-align: general; vertical-align: middle; white-space: nowrap; border: .5pt solid windowtext; padding-left: 1px; padding-right: 1px; padding-top: 1px"
+                            align="left">
+                            <p align="left">
+                                <font color="#e16d6b">类名称</font></td>
+                        <td style="width: 263px; font-weight: 700; color: black; font-size: 11.0pt; font-style: normal; text-decoration: none; font-family: 微软雅黑, sans-serif; text-align: general; vertical-align: middle; white-space: nowrap; border-left: medium none; border-right: .5pt solid windowtext; border-top: .5pt solid windowtext; border-bottom: .5pt solid windowtext; padding-left: 1px; padding-right: 1px; padding-top: 1px"
+                            align="left">
+                            <p align="left">
+                                <font color="#e16d6b">新增接口</font></td>
+                        <td style="width: 575px; font-weight: 700; color: black; font-size: 11.0pt; font-style: normal; text-decoration: none; font-family: 微软雅黑, sans-serif; text-align: general; vertical-align: middle; white-space: nowrap; border-left: medium none; border-right: .5pt solid windowtext; border-top: .5pt solid windowtext; border-bottom: .5pt solid windowtext; padding-left: 1px; padding-right: 1px; padding-top: 1px"
+                            align="left">
+                            <p align="left">
+
+                                <font color="#e16d6b">接口说明</font></td>
+                    </tr>
+
+                    <!--从此处开始正式填入接口内容。-->
+                    <tr height="22" style="height:16.5pt">
+                        <td rowspan="2" height="44"
+                            style="height: 49.5pt; font-weight: 700; color: black; font-size: 11.0pt; font-style: normal; text-decoration: none; font-family: 微软雅黑, sans-serif; vertical-align: middle; white-space: nowrap; border-left: .5pt solid windowtext; border-right: .5pt solid windowtext; border-top: medium none; border-bottom: .5pt solid black; padding-left: 1px; padding-right: 1px; padding-top: 1px"
+                            width="261" align="left">
+                            <p align="left">
+                                <font face="宋体" size="3">LoadingPriorityMode</font></td>
+                        <td style="color: black; font-size: 11.0pt; font-weight: 400; font-style: normal; text-decoration: none; font-family: 微软雅黑, sans-serif; text-align: general; vertical-align: middle; white-space: nowrap; border-left: medium none; border-right: .5pt solid windowtext; border-top: medium none; border-bottom: .5pt solid windowtext; padding-left: 1px; padding-right: 1px; padding-top: 1px"
+                            width="263" align="left">
+                            <p align="left">
+                                <font face="宋体" size="3">UsePagedLodInfo : 2</font></td>
+                        <td style="color: black; font-size: 11.0pt; font-weight: 400; font-style: normal; text-decoration: none; font-family: 微软雅黑, sans-serif; text-align: general; vertical-align: middle; white-space: nowrap; border-left: medium none; border-right: .5pt solid windowtext; border-top: medium none; border-bottom: .5pt solid windowtext; padding-left: 1px; padding-right: 1px; padding-top: 1px"
+                            width="575" align="left">
+                            <p align="left">
+                                <font face="宋体" size="3">根据空间索引优先加载模式。</font></td>
+                    </tr>
+                    <tr height="22" style="height:16.5pt">
+                        <td height="22"
+                            style="height: 16.5pt; color: black; font-size: 11.0pt; font-weight: 400; font-style: normal; text-decoration: none; font-family: 微软雅黑, sans-serif; text-align: general; vertical-align: middle; white-space: nowrap; border-left: medium none; border-right: .5pt solid windowtext; border-top: medium none; border-bottom: .5pt solid windowtext; padding-left: 1px; padding-right: 1px; padding-top: 1px"
+                            width="263" align="left">
+                            <p align="left">
+                                <font face="宋体" size="3">Child_Priority_NonLinear：3</font></td>
+                        <td style="color: black; font-size: 11.0pt; font-weight: 400; font-style: normal; text-decoration: none; font-family: 微软雅黑, sans-serif; text-align: general; vertical-align: middle; white-space: nowrap; border-left: medium none; border-right: .5pt solid windowtext; border-top: medium none; border-bottom: .5pt solid windowtext; padding-left: 1px; padding-right: 1px; padding-top: 1px"
+                            width="575" align="left">
+                            <p align="left">
+                                <font face="宋体" size="3">深度优先非线性切换。加载大面积精细模型缓存时，选择该模式，可以减少远处的更新量。</font></td>
+                    </tr>
+
+                    <tr height="22" style="height:16.5pt">
+                        <td rowspan="1" height="22"
+                            style="height: 49.5pt; font-weight: 700; color: black; font-size: 11.0pt; font-style: normal; text-decoration: none; font-family: 微软雅黑, sans-serif; vertical-align: middle; white-space: nowrap; border-left: .5pt solid windowtext; border-right: .5pt solid windowtext; border-top: medium none; border-bottom: .5pt solid black; padding-left: 1px; padding-right: 1px; padding-top: 1px"
+                            width="261" align="left">
+                            <p align="left">
+                                <font face="宋体" size="3">ImageryLayer</font></td>
+                        <td style="color: black; font-size: 11.0pt; font-weight: 400; font-style: normal; text-decoration: none; font-family: 微软雅黑, sans-serif; text-align: general; vertical-align: middle; white-space: nowrap; border-left: medium none; border-right: .5pt solid windowtext; border-top: medium none; border-bottom: .5pt solid windowtext; padding-left: 1px; padding-right: 1px; padding-top: 1px"
+                            width="263" align="left">
+                            <p align="left">
+                                <font face="宋体" size="3">lodOffset</font></td>
+                        <td style="color: black; font-size: 11.0pt; font-weight: 400; font-style: normal; text-decoration: none; font-family: 微软雅黑, sans-serif; text-align: general; vertical-align: middle; white-space: nowrap; border-left: medium none; border-right: .5pt solid windowtext; border-top: medium none; border-bottom: .5pt solid windowtext; padding-left: 1px; padding-right: 1px; padding-top: 1px"
+                            width="575" align="left">
+                            <p align="left">
+                                <font face="宋体" size="3">获取或者设置加载影像图层时的偏移量。</font></td>
+                    </tr>
+                    <tr height="22" style="height:16.5pt">
+                        <td rowspan="3" height="66"
+                            style="height: 49.5pt; font-weight: 700; color: black; font-size: 11.0pt; font-style: normal; text-decoration: none; font-family: 微软雅黑, sans-serif; vertical-align: middle; white-space: nowrap; border-left: .5pt solid windowtext; border-right: .5pt solid windowtext; border-top: medium none; border-bottom: .5pt solid black; padding-left: 1px; padding-right: 1px; padding-top: 1px"
+                            width="261" align="left">
+                            <p align="left">
+                                <font face="宋体" size="3">ScanEffect</font></td>
+                        <td style="color: black; font-size: 11.0pt; font-weight: 400; font-style: normal; text-decoration: none; font-family: 微软雅黑, sans-serif; text-align: general; vertical-align: middle; white-space: nowrap; border-left: medium none; border-right: .5pt solid windowtext; border-top: medium none; border-bottom: .5pt solid windowtext; padding-left: 1px; padding-right: 1px; padding-top: 1px"
+                            width="263" align="left">
+                            <p align="left">
+                                <font face="宋体" size="3">count</font></td>
+                        <td style="color: black; font-size: 11.0pt; font-weight: 400; font-style: normal; text-decoration: none; font-family: 微软雅黑, sans-serif; text-align: general; vertical-align: middle; white-space: nowrap; border-left: medium none; border-right: .5pt solid windowtext; border-top: medium none; border-bottom: .5pt solid windowtext; padding-left: 1px; padding-right: 1px; padding-top: 1px"
+                            width="575" align="left">
+                            <p align="left">
+                                <font face="宋体" size="3">获取当前场景中的扫描线个数。</font></td>
+                    </tr>
+                    <tr height="22" style="height:16.5pt">
+                        <td height="22"
+                            style="height: 16.5pt; color: black; font-size: 11.0pt; font-weight: 400; font-style: normal; text-decoration: none; font-family: 微软雅黑, sans-serif; text-align: general; vertical-align: middle; white-space: nowrap; border-left: medium none; border-right: .5pt solid windowtext; border-top: medium none; border-bottom: .5pt solid windowtext; padding-left: 1px; padding-right: 1px; padding-top: 1px"
+                            width="263" align="left">
+                            <p align="left">
+                                <font face="宋体" size="3">add</font></td>
+                        <td style="color: black; font-size: 11.0pt; font-weight: 400; font-style: normal; text-decoration: none; font-family: 微软雅黑, sans-serif; text-align: general; vertical-align: middle; white-space: nowrap; border-left: medium none; border-right: .5pt solid windowtext; border-top: medium none; border-bottom: .5pt solid windowtext; padding-left: 1px; padding-right: 1px; padding-top: 1px"
+                            width="575" align="left">
+                            <p align="left">
+                                <font face="宋体" size="3">通过指定扫描线中心点的位置添加扫描线。</font></td>
+                    </tr>
+                    <tr height="22" style="height:16.5pt">
+                        <td height="22"
+                            style="height: 16.5pt; color: black; font-size: 11.0pt; font-weight: 400; font-style: normal; text-decoration: none; font-family: 微软雅黑, sans-serif; text-align: general; vertical-align: middle; white-space: nowrap; border-left: medium none; border-right: .5pt solid windowtext; border-top: medium none; border-bottom: .5pt solid windowtext; padding-left: 1px; padding-right: 1px; padding-top: 1px"
+                            width="263" align="left">
+                            <p align="left">
+                                <font face="宋体" size="3">remove</font></td>
+                        <td style="color: black; font-size: 11.0pt; font-weight: 400; font-style: normal; text-decoration: none; font-family: 微软雅黑, sans-serif; text-align: general; vertical-align: middle; white-space: nowrap; border-left: medium none; border-right: .5pt solid windowtext; border-top: medium none; border-bottom: .5pt solid windowtext; padding-left: 1px; padding-right: 1px; padding-top: 1px"
+                            width="575" align="left">
+                            <p align="left">
+                                <font face="宋体" size="3">根据索引移除扫描线。</font></td>
+                    </tr>
+                    <!--1-->
+
+                    <tr height="22" style="height:16.5pt">
+                        <td rowspan="2" height="44"
+                            style="height: 16.5pt; font-weight: 700; color: black; font-size: 11.0pt; font-style: normal; text-decoration: none; font-family: 微软雅黑, sans-serif; text-align: general; vertical-align: middle; white-space: nowrap; border-left: .5pt solid windowtext; border-right: .5pt solid windowtext; border-top: medium none; border-bottom: .5pt solid windowtext; padding-left: 1px; padding-right: 1px; padding-top: 1px"
+                            width="261" align="left">
+                            <p align="left">
+                                <font face="宋体" size="3">Scene</font></td>
+                        <td style="color: black; font-size: 11.0pt; font-weight: 400; font-style: normal; text-decoration: none; font-family: 微软雅黑, sans-serif; text-align: general; vertical-align: middle; white-space: nowrap; border-left: medium none; border-right: .5pt solid windowtext; border-top: medium none; border-bottom: .5pt solid windowtext; padding-left: 1px; padding-right: 1px; padding-top: 1px"
+                            width="263" align="left">
+                            <p align="left">
+                                <font face="宋体" size="3">overlapDisplayOptions</font></td>
+                        <td style="color: black; font-size: 11.0pt; font-weight: 400; font-style: normal; text-decoration: none; font-family: 微软雅黑, sans-serif; text-align: general; vertical-align: middle; white-space: nowrap; border-left: medium none; border-right: .5pt solid windowtext; border-top: medium none; border-bottom: .5pt solid windowtext; padding-left: 1px; padding-right: 1px; padding-top: 1px"
+                            width="575" align="left">
+                            <p align="left">
+                                <font face="宋体" size="3">设置图层的避让参数。</font></td>
+                    </tr>
+                    <tr height="22" style="height:16.5pt">
+                        <td height="22"
+                            style="height: 16.5pt; color: black; font-size: 11.0pt; font-weight: 400; font-style: normal; text-decoration: none; font-family: 微软雅黑, sans-serif; text-align: general; vertical-align: middle; white-space: nowrap; border-left: medium none; border-right: .5pt solid windowtext; border-top: medium none; border-bottom: .5pt solid windowtext; padding-left: 1px; padding-right: 1px; padding-top: 1px"
+                            width="263" align="left">
+                            <p align="left">
+                                <font face="宋体" size="3">open</font></td>
+                        <td style="color: black; font-size: 11.0pt; font-weight: 400; font-style: normal; text-decoration: none; font-family: 微软雅黑, sans-serif; text-align: general; vertical-align: middle; white-space: nowrap; border-left: medium none; border-right: .5pt solid windowtext; border-top: medium none; border-bottom: .5pt solid windowtext; padding-left: 1px; padding-right: 1px; padding-top: 1px"
+                            width="575" align="left">
+                            <p align="left">
+                                <font face="宋体" size="3">打开场景(subdomains：获取或者设置子域名称；autoSetView：是否自动定位到场景)。</font></td>
+                    </tr>
+
+                    <tr height="22" style="height:16.5pt">
+                        <td height="22"
+                            style="height: 16.5pt; font-weight: 700; color: black; font-size: 11.0pt; font-style: normal; text-decoration: none; font-family: 微软雅黑, sans-serif; text-align: general; vertical-align: middle; white-space: nowrap; border-left: .5pt solid windowtext; border-right: .5pt solid windowtext; border-top: medium none; border-bottom: .5pt solid windowtext; padding-left: 1px; padding-right: 1px; padding-top: 1px"
+                            width="261" align="left">
+                            <p align="left">
+                                <font face="宋体" size="3">DynamicLayer3D</font></td>
+                        <td style="color: black; font-size: 11.0pt; font-weight: 400; font-style: normal; text-decoration: none; font-family: 微软雅黑, sans-serif; text-align: general; vertical-align: middle; white-space: nowrap; border-left: medium none; border-right: .5pt solid windowtext; border-top: medium none; border-bottom: .5pt solid windowtext; padding-left: 1px; padding-right: 1px; padding-top: 1px"
+                            width="263" align="left">
+                            <p align="left">
+                                <font face="宋体" size="3">shadowType</font></td>
+                        <td style="color: black; font-size: 11.0pt; font-weight: 400; font-style: normal; text-decoration: none; font-family: 微软雅黑, sans-serif; text-align: general; vertical-align: middle; white-space: nowrap; border-left: medium none; border-right: .5pt solid windowtext; border-top: medium none; border-bottom: .5pt solid windowtext; padding-left: 1px; padding-right: 1px; padding-top: 1px"
+                            width="575" align="left">
+                            <p align="left">
+                                <font face="宋体" size="3">获取或者设置阴影模式。默认值为NONE。</font></td>
+                    </tr>
+
+                    <tr height="22" style="height:16.5pt">
+                        <td height="22"
+                            style="height: 16.5pt; font-weight: 700; color: black; font-size: 11.0pt; font-style: normal; text-decoration: none; font-family: 微软雅黑, sans-serif; text-align: general; vertical-align: middle; white-space: nowrap; border-left: .5pt solid windowtext; border-right: .5pt solid windowtext; border-top: medium none; border-bottom: .5pt solid windowtext; padding-left: 1px; padding-right: 1px; padding-top: 1px"
+                            width="261" align="left">
+                            <p align="left">
+                                <font face="宋体" size="3">InstanceLayer</font></td>
+                        <td style="color: black; font-size: 11.0pt; font-weight: 400; font-style: normal; text-decoration: none; font-family: 微软雅黑, sans-serif; text-align: general; vertical-align: middle; white-space: nowrap; border-left: medium none; border-right: .5pt solid windowtext; border-top: medium none; border-bottom: .5pt solid windowtext; padding-left: 1px; padding-right: 1px; padding-top: 1px"
+                            width="263" align="left">
+                            <p align="left">
+                                <font face="宋体" size="3">shadowType</font></td>
+                        <td style="color: black; font-size: 11.0pt; font-weight: 400; font-style: normal; text-decoration: none; font-family: 微软雅黑, sans-serif; text-align: general; vertical-align: middle; white-space: nowrap; border-left: medium none; border-right: .5pt solid windowtext; border-top: medium none; border-bottom: .5pt solid windowtext; padding-left: 1px; padding-right: 1px; padding-top: 1px"
+                            width="575" align="left">
+                            <p align="left">
+                                <font face="宋体" size="3">获取或者设置阴影模式。默认值为NONE。</font></td>
+                    </tr>
+
+                    <tr height="22" style="height:16.5pt">
+                        <td style="height: 16.5pt; font-weight: 700; color: black; font-size: 11.0pt; font-style: normal; text-decoration: none; font-family: 微软雅黑, sans-serif; vertical-align: middle; white-space: nowrap; border-left: .5pt solid windowtext; border-right: .5pt solid windowtext; border-top: medium none; border-bottom: .5pt solid windowtext; padding-left: 1px; padding-right: 1px; padding-top: 1px"
+                            width="261" align="left">
+                            <p align="left">
+                                <font face="宋体" size="3">S3MInstanceCollection</font></td>
+                        <td style="color: black; font-size: 11.0pt; font-weight: 400; font-style: normal; text-decoration: none; font-family: 微软雅黑, sans-serif; text-align: general; vertical-align: middle; white-space: nowrap; border-left: medium none; border-right: .5pt solid windowtext; border-top: medium none; border-bottom: .5pt solid windowtext; padding-left: 1px; padding-right: 1px; padding-top: 1px"
+                            width="263" align="left">
+                            <p align="left">
+                                <font face="宋体" size="3">shadowType</font></td>
+                        <td style="color: black; font-size: 11.0pt; font-weight: 400; font-style: normal; text-decoration: none; font-family: 微软雅黑, sans-serif; text-align: general; vertical-align: middle; white-space: nowrap; border-left: medium none; border-right: .5pt solid windowtext; border-top: medium none; border-bottom: .5pt solid windowtext; padding-left: 1px; padding-right: 1px; padding-top: 1px"
+                            width="575" align="left">
+                            <p align="left">
+                                <font face="宋体" size="3">获取或者设置阴影模式。默认值为NONE。</font></td>
+                    </tr>
+
+                    <tr height="22" style="height:16.5pt">
+                        <td rowspan="8" height="176"
+                            style="height: 99pt; font-weight: 700; color: black; font-size: 11.0pt; font-style: normal; text-decoration: none; font-family: 微软雅黑, sans-serif; vertical-align: middle; white-space: nowrap; border-left: .5pt solid windowtext; border-right: .5pt solid windowtext; border-top: medium none; border-bottom: .5pt solid windowtext; padding-left: 1px; padding-right: 1px; padding-top: 1px"
+                            width="261" align="left">
+                            <p align="left">
+                                <font face="宋体" size="3">S3MTilesLayer</font></td>
+                        <td style="color: black; font-size: 11.0pt; font-weight: 400; font-style: normal; text-decoration: none; font-family: 微软雅黑, sans-serif; text-align: general; vertical-align: middle; white-space: nowrap; border-left: medium none; border-right: .5pt solid windowtext; border-top: medium none; border-bottom: .5pt solid windowtext; padding-left: 1px; padding-right: 1px; padding-top: 1px"
+                            width="263" align="left">
+                            <p align="left">
+                                <font face="宋体" size="3">priorityScale</font></td>
+                        <td style="color: black; font-size: 11.0pt; font-weight: 400; font-style: normal; text-decoration: none; font-family: 微软雅黑, sans-serif; text-align: general; vertical-align: middle; white-space: nowrap; border-left: medium none; border-right: .5pt solid windowtext; border-top: medium none; border-bottom: .5pt solid windowtext; padding-left: 1px; padding-right: 1px; padding-top: 1px"
+                            width="575" align="left">
+                            <p align="left">
+                                <font face="宋体" size="3">获取或者设置更新优先级系数，可以控制多个图层间的更新优先级顺序。</font></td>
+                    </tr>
+                    <tr height="22" style="height:16.5pt">
+                        <td height="22"
+                            style="height: 16.5pt; color: black; font-size: 11.0pt; font-weight: 400; font-style: normal; text-decoration: none; font-family: 微软雅黑, sans-serif; text-align: general; vertical-align: middle; white-space: nowrap; border-left: medium none; border-right: .5pt solid windowtext; border-top: medium none; border-bottom: .5pt solid windowtext; padding-left: 1px; padding-right: 1px; padding-top: 1px"
+                            width="263" align="left">
+                            <p align="left">
+                                <font face="宋体" size="3">selectedLineColor</font></td>
+                        <td style="color: black; font-size: 11.0pt; font-weight: 400; font-style: normal; text-decoration: none; font-family: 微软雅黑, sans-serif; text-align: general; vertical-align: middle; white-space: nowrap; border-left: medium none; border-right: .5pt solid windowtext; border-top: medium none; border-bottom: .5pt solid windowtext; padding-left: 1px; padding-right: 1px; padding-top: 1px"
+                            width="575" align="left">
+                            <p align="left">
+                                <font face="宋体" size="3">获取或者设置图层选中对象线框高亮的颜色。</font></td>
+                    </tr>
+                    <tr height="22" style="height:16.5pt">
+                        <td height="22"
+                            style="height: 16.5pt; color: black; font-size: 11.0pt; font-weight: 400; font-style: normal; text-decoration: none; font-family: 微软雅黑, sans-serif; text-align: general; vertical-align: middle; white-space: nowrap; border-left: medium none; border-right: .5pt solid windowtext; border-top: medium none; border-bottom: .5pt solid windowtext; padding-left: 1px; padding-right: 1px; padding-top: 1px"
+                            width="263" align="left">
+                            <p align="left">
+                                <font face="宋体" size="3">clippingType</font></td>
+                        <td style="color: black; font-size: 11.0pt; font-weight: 400; font-style: normal; text-decoration: none; font-family: 微软雅黑, sans-serif; text-align: general; vertical-align: middle; white-space: nowrap; border-left: medium none; border-right: .5pt solid windowtext; border-top: medium none; border-bottom: .5pt solid windowtext; padding-left: 1px; padding-right: 1px; padding-top: 1px"
+                            width="575" align="left">
+                            <p align="left">
+                                <font face="宋体" size="3">获取或者设置裁剪模式。</font></td>
+                    </tr>
+                    <tr height="22" style="height:16.5pt">
+                        <td height="22"
+                            style="height: 16.5pt; color: black; font-size: 11.0pt; font-weight: 400; font-style: normal; text-decoration: none; font-family: 微软雅黑, sans-serif; text-align: general; vertical-align: middle; white-space: nowrap; border-left: medium none; border-right: .5pt solid windowtext; border-top: medium none; border-bottom: .5pt solid windowtext; padding-left: 1px; padding-right: 1px; padding-top: 1px"
+                            width="263" align="left">
+                            <p align="left">
+                                <font face="宋体" size="3">iconRelatedTextLayerID</font></td>
+                        <td style="color: black; font-size: 11.0pt; font-weight: 400; font-style: normal; text-decoration: none; font-family: 微软雅黑, sans-serif; text-align: general; vertical-align: middle; white-space: nowrap; border-left: medium none; border-right: .5pt solid windowtext; border-top: medium none; border-bottom: .5pt solid windowtext; padding-left: 1px; padding-right: 1px; padding-top: 1px"
+                            width="575" align="left">
+                            <p align="left">
+                                <font face="宋体" size="3">获取或者设置文字图层的ID。该接口根据ID指定一个文字图层，
+                                    让图标图层跟随该图层进行避让。</font></td>
+                    </tr>
+                    <tr height="22" style="height:16.5pt">
+                        <td height="22"
+                            style="height: 16.5pt; color: black; font-size: 11.0pt; font-weight: 400; font-style: normal; text-decoration: none; font-family: 微软雅黑, sans-serif; text-align: general; vertical-align: middle; white-space: nowrap; border-left: medium none; border-right: .5pt solid windowtext; border-top: medium none; border-bottom: .5pt solid windowtext; padding-left: 1px; padding-right: 1px; padding-top: 1px"
+                            width="263" align="left">
+                            <p align="left">
+                                <font face="宋体" size="3">setObjsTranslate(ids, translate)</font></td>
+                        <td style="color: black; font-size: 11.0pt; font-weight: 400; font-style: normal; text-decoration: none; font-family: 微软雅黑, sans-serif; text-align: general; vertical-align: middle; white-space: nowrap; border-left: medium none; border-right: .5pt solid windowtext; border-top: medium none; border-bottom: .5pt solid windowtext; padding-left: 1px; padding-right: 1px; padding-top: 1px"
+                            width="575" align="left">
+                            <p align="left">
+                                <font face="宋体" size="3">根据指定的id设置对象的偏移。</font></td>
+                    </tr>
+                    <tr height="22" style="height:16.5pt">
+                        <td height="22"
+                            style="height: 16.5pt; color: black; font-size: 11.0pt; font-weight: 400; font-style: normal; text-decoration: none; font-family: 微软雅黑, sans-serif; text-align: general; vertical-align: middle; white-space: nowrap; border-left: medium none; border-right: .5pt solid windowtext; border-top: medium none; border-bottom: .5pt solid windowtext; padding-left: 1px; padding-right: 1px; padding-top: 1px"
+                            width="263" align="left">
+                            <p align="left">
+                                <font face="宋体" size="3">removeObjsTranslate(ids)</font></td>
+                        <td style="color: black; font-size: 11.0pt; font-weight: 400; font-style: normal; text-decoration: none; font-family: 微软雅黑, sans-serif; text-align: general; vertical-align: middle; white-space: nowrap; border-left: medium none; border-right: .5pt solid windowtext; border-top: medium none; border-bottom: .5pt solid windowtext; padding-left: 1px; padding-right: 1px; padding-top: 1px"
+                            width="575" align="left">
+                            <p align="left">
+                                <font face="宋体" size="3">移除指定id对象的偏移。Ids：拟移除偏移的对象的id集合。</font></td>
+                    </tr>
+                    <tr height="22" style="height:16.5pt">
+                        <td height="22"
+                            style="height: 16.5pt; color: black; font-size: 11.0pt; font-weight: 400; font-style: normal; text-decoration: none; font-family: 微软雅黑, sans-serif; text-align: general; vertical-align: middle; white-space: nowrap; border-left: medium none; border-right: .5pt solid windowtext; border-top: medium none; border-bottom: .5pt solid windowtext; padding-left: 1px; padding-right: 1px; padding-top: 1px"
+                            width="263" align="left">
+                            <p align="left">
+                                <font face="宋体" size="3">removeAllObjsTranslate</font></td>
+                        <td style="color: black; font-size: 11.0pt; font-weight: 400; font-style: normal; text-decoration: none; font-family: 微软雅黑, sans-serif; text-align: general; vertical-align: middle; white-space: nowrap; border-left: medium none; border-right: .5pt solid windowtext; border-top: medium none; border-bottom: .5pt solid windowtext; padding-left: 1px; padding-right: 1px; padding-top: 1px"
+                            width="575" align="left">
+                            <p align="left">
+                                <font face="宋体" size="3">移除所有对象的偏移。</font></td>
+                    </tr>
+                    <tr height="22" style="height:16.5pt">
+                        <td height="22"
+                            style="height: 16.5pt; color: black; font-size: 11.0pt; font-weight: 400; font-style: normal; text-decoration: none; font-family: 微软雅黑, sans-serif; text-align: general; vertical-align: middle; white-space: nowrap; border-left: medium none; border-right: .5pt solid windowtext; border-top: medium none; border-bottom: .5pt solid windowtext; padding-left: 1px; padding-right: 1px; padding-top: 1px"
+                            width="263" align="left">
+                            <p align="left">
+                                <font face="宋体" size="3">setCustomClipGeometry(options)</font></td>
+                        <td style="color: black; font-size: 11.0pt; font-weight: 400; font-style: normal; text-decoration: none; font-family: 微软雅黑, sans-serif; text-align: general; vertical-align: middle; white-space: nowrap; border-left: medium none; border-right: .5pt solid windowtext; border-top: medium none; border-bottom: .5pt solid windowtext; padding-left: 1px; padding-right: 1px; padding-top: 1px"
+                            width="575" align="left">
+                            <p align="left">
+                                <font face="宋体" size="3">设置多面体裁剪参数。</font></td>
+                    </tr>
+
+                    <!--2-->
+                    <tr height="22" style="height:16.5pt">
+                        <td style="height: 33.0pt; font-weight: 700; color: black; font-size: 11.0pt; font-style: normal; text-decoration: none; font-family: 微软雅黑, sans-serif; vertical-align: middle; white-space: nowrap; border-left: .5pt solid windowtext; border-right: .5pt solid windowtext; border-top: medium none; border-bottom: .5pt solid windowtext; padding-left: 1px; padding-right: 1px; padding-top: 1px"
+                            width="261" align="left">
+                            <p align="left">
+                                <font face="宋体" size="3">CesiumTerrainProvider</font></td>
+                        <td style="color: black; font-size: 11.0pt; font-weight: 400; font-style: normal; text-decoration: none; font-family: 微软雅黑, sans-serif; vertical-align: middle; white-space: nowrap; border-left: medium none; border-right: .5pt solid windowtext; border-top: medium none; border-bottom: .5pt solid windowtext; padding-left: 1px; padding-right: 1px; padding-top: 1px"
+                            width="263" align="left">
+                            <p align="left">
+                                <font face="宋体" size="3">visible</font></td>
+                        <td style="color: black; font-size: 11.0pt; font-weight: 400; font-style: normal; text-decoration: none; font-family: 微软雅黑, sans-serif; vertical-align: middle; white-space: nowrap; border-left: medium none; border-right: .5pt solid windowtext; border-top: medium none; border-bottom: .5pt solid windowtext; padding-left: 1px; padding-right: 1px; padding-top: 1px"
+                            width="575" align="left">
+                            <p align="left">
+                                <font face="宋体" size="3">获取或者设置地形是否可见。</font></td>
+                    </tr>
+
+                    <tr height="22" style="height:16.5pt">
+                        <td rowspan="4" height="88"
+                            style="height: 33.0pt; font-weight: 700; color: black; font-size: 11.0pt; font-style: normal; text-decoration: none; font-family: 微软雅黑, sans-serif; vertical-align: middle; white-space: nowrap; border-left: .5pt solid windowtext; border-right: .5pt solid windowtext; border-top: medium none; border-bottom: .5pt solid windowtext; padding-left: 1px; padding-right: 1px; padding-top: 1px"
+                            width="261" align="left">
+                            <p align="left">
+                                <font face="宋体" size="3">ProjectionImage</font></td>
+                        <td style="color: black; font-size: 11.0pt; font-weight: 400; font-style: normal; text-decoration: none; font-family: 微软雅黑, sans-serif; vertical-align: middle; white-space: nowrap; border-left: medium none; border-right: .5pt solid windowtext; border-top: medium none; border-bottom: .5pt solid windowtext; padding-left: 1px; padding-right: 1px; padding-top: 1px"
+                            width="263" align="left">
+                            <p align="left">
+                                <font face="宋体" size="3">visible</font></td>
+                        <td style="color: black; font-size: 11.0pt; font-weight: 400; font-style: normal; text-decoration: none; font-family: 微软雅黑, sans-serif; vertical-align: middle; white-space: nowrap; border-left: medium none; border-right: .5pt solid windowtext; border-top: medium none; border-bottom: .5pt solid windowtext; padding-left: 1px; padding-right: 1px; padding-top: 1px"
+                            width="575" align="left">
+                            <p align="left">
+                                <font face="宋体" size="3">获取或者设置投放的视频是否可见，默认为true。</font></td>
+                    </tr>
+                    <tr height="22" style="height:16.5pt">
+                        <td height="22"
+                            style="height: 16.5pt; color: black; font-size: 11.0pt; font-weight: 400; font-style: normal; text-decoration: none; font-family: 微软雅黑, sans-serif; text-align: general; vertical-align: middle; white-space: nowrap; border-left: medium none; border-right: .5pt solid windowtext; border-top: medium none; border-bottom: .5pt solid windowtext; padding-left: 1px; padding-right: 1px; padding-top: 1px"
+                            width="263" align="left">
+                            <p align="left">
+                                <font face="宋体" size="3">visibleDistanceMax</font></td>
+                        <td style="color: black; font-size: 11.0pt; font-weight: 400; font-style: normal; text-decoration: none; font-family: 微软雅黑, sans-serif; text-align: general; vertical-align: middle; white-space: nowrap; border-left: medium none; border-right: .5pt solid windowtext; border-top: medium none; border-bottom: .5pt solid windowtext; padding-left: 1px; padding-right: 1px; padding-top: 1px"
+                            width="575" align="left">
+                            <p align="left">
+                                <font face="宋体" size="3">获取或者设置视频投放的最大可见距离。</font></td>
+                    </tr>
+                    <tr height="22" style="height:16.5pt">
+                        <td height="22"
+                            style="height: 16.5pt; color: black; font-size: 11.0pt; font-weight: 400; font-style: normal; text-decoration: none; font-family: 微软雅黑, sans-serif; text-align: general; vertical-align: middle; white-space: nowrap; border-left: medium none; border-right: .5pt solid windowtext; border-top: medium none; border-bottom: .5pt solid windowtext; padding-left: 1px; padding-right: 1px; padding-top: 1px"
+                            width="263" align="left">
+                            <p align="left">
+                                <font face="宋体" size="3">setInfo(url)</font></td>
+                        <td style="color: black; font-size: 11.0pt; font-weight: 400; font-style: normal; text-decoration: none; font-family: 微软雅黑, sans-serif; text-align: general; vertical-align: middle; white-space: nowrap; border-left: medium none; border-right: .5pt solid windowtext; border-top: medium none; border-bottom: .5pt solid windowtext; padding-left: 1px; padding-right: 1px; padding-top: 1px"
+                            width="575" align="left">
+                            <p align="left">
+                                <font face="宋体" size="3">通过文件进行视频投放。</font></td>
+                    </tr>
+                    <tr height="22" style="height:16.5pt">
+                        <td height="22"
+                            style="height: 16.5pt; color: black; font-size: 11.0pt; font-weight: 400; font-style: normal; text-decoration: none; font-family: 微软雅黑, sans-serif; text-align: general; vertical-align: middle; white-space: nowrap; border-left: medium none; border-right: .5pt solid windowtext; border-top: medium none; border-bottom: .5pt solid windowtext; padding-left: 1px; padding-right: 1px; padding-top: 1px"
+                            width="263" align="left">
+                            <p align="left">
+                                <font face="宋体" size="3">fromInfo(scene, infoUrl, baseUrl)</font></td>
+                        <td style="color: black; font-size: 11.0pt; font-weight: 400; font-style: normal; text-decoration: none; font-family: 微软雅黑, sans-serif; text-align: general; vertical-align: middle; white-space: nowrap; border-left: medium none; border-right: .5pt solid windowtext; border-top: medium none; border-bottom: .5pt solid windowtext; padding-left: 1px; padding-right: 1px; padding-top: 1px"
+                            width="575" align="left">
+                            <p align="left">
+                                <font face="宋体" size="3">通过文件同时添加多个视频进行投放。</font></td>
+                    </tr>
+
+                    <tr height="22" style="height:16.5pt">
+                        <td rowspan="3" height="66"
+                            style="height: 33.0pt; font-weight: 700; color: black; font-size: 11.0pt; font-style: normal; text-decoration: none; font-family: 微软雅黑, sans-serif; vertical-align: middle; white-space: nowrap; border-left: .5pt solid windowtext; border-right: .5pt solid windowtext; border-top: medium none; border-bottom: .5pt solid windowtext; padding-left: 1px; padding-right: 1px; padding-top: 1px"
+                            width="261" align="left">
+                            <p align="left">
+                                <font face="宋体" size="3">SkyBox</font></td>
+                        <td style="color: black; font-size: 11.0pt; font-weight: 400; font-style: normal; text-decoration: none; font-family: 微软雅黑, sans-serif; vertical-align: middle; white-space: nowrap; border-left: medium none; border-right: .5pt solid windowtext; border-top: medium none; border-bottom: .5pt solid windowtext; padding-left: 1px; padding-right: 1px; padding-top: 1px"
+                            width="263" align="left">
+                            <p align="left">
+                                <font face="宋体" size="3">USpeed</font></td>
+                        <td style="color: black; font-size: 11.0pt; font-weight: 400; font-style: normal; text-decoration: none; font-family: 微软雅黑, sans-serif; vertical-align: middle; white-space: nowrap; border-left: medium none; border-right: .5pt solid windowtext; border-top: medium none; border-bottom: .5pt solid windowtext; padding-left: 1px; padding-right: 1px; padding-top: 1px"
+                            width="575" align="left">
+                            <p align="left">
+                                <font face="宋体" size="3">获取或者设置天空盒子绕x轴运动的动画速度。</font></td>
+                    </tr>
+                    <tr height="22" style="height:16.5pt">
+                        <td height="22"
+                            style="height: 16.5pt; color: black; font-size: 11.0pt; font-weight: 400; font-style: normal; text-decoration: none; font-family: 微软雅黑, sans-serif; text-align: general; vertical-align: middle; white-space: nowrap; border-left: medium none; border-right: .5pt solid windowtext; border-top: medium none; border-bottom: .5pt solid windowtext; padding-left: 1px; padding-right: 1px; padding-top: 1px"
+                            width="263" align="left">
+                            <p align="left">
+                                <font face="宋体" size="3">Vspeed</font></td>
+                        <td style="color: black; font-size: 11.0pt; font-weight: 400; font-style: normal; text-decoration: none; font-family: 微软雅黑, sans-serif; text-align: general; vertical-align: middle; white-space: nowrap; border-left: medium none; border-right: .5pt solid windowtext; border-top: medium none; border-bottom: .5pt solid windowtext; padding-left: 1px; padding-right: 1px; padding-top: 1px"
+                            width="575" align="left">
+                            <p align="left">
+                                <font face="宋体" size="3">获取或者设置天空盒子绕y轴运动的动画速度。</font></td>
+                    </tr>
+                    <tr height="22" style="height:16.5pt">
+                        <td height="22"
+                            style="height: 16.5pt; color: black; font-size: 11.0pt; font-weight: 400; font-style: normal; text-decoration: none; font-family: 微软雅黑, sans-serif; text-align: general; vertical-align: middle; white-space: nowrap; border-left: medium none; border-right: .5pt solid windowtext; border-top: medium none; border-bottom: .5pt solid windowtext; padding-left: 1px; padding-right: 1px; padding-top: 1px"
+                            width="263" align="left">
+                            <p align="left">
+                                <font face="宋体" size="3">Wspeed</font></td>
+                        <td style="color: black; font-size: 11.0pt; font-weight: 400; font-style: normal; text-decoration: none; font-family: 微软雅黑, sans-serif; text-align: general; vertical-align: middle; white-space: nowrap; border-left: medium none; border-right: .5pt solid windowtext; border-top: medium none; border-bottom: .5pt solid windowtext; padding-left: 1px; padding-right: 1px; padding-top: 1px"
+                            width="575" align="left">
+                            <p align="left">
+                                <font face="宋体" size="3">获取或者设置天空盒子绕z轴运动的动画速度。</font></td>
+                    </tr>
+
+                    <tr>
+                        <td rowspan="1" height="22"
+                            style="height: 33.0pt; font-weight: 700; color: black; font-size: 11.0pt; font-style: normal; text-decoration: none; font-family: 微软雅黑, sans-serif; vertical-align: middle; white-space: nowrap; border-left: .5pt solid windowtext; border-right: .5pt solid windowtext; border-top: medium none; border-bottom: .5pt solid windowtext; padding-left: 1px; padding-right: 1px; padding-top: 1px"
+                            width="261" align="left">
+                            <p align="left">
+                                <font face="宋体" size="3">SolidModelsProfile</font></td>
+                        <td style="color: black; font-size: 11.0pt; font-weight: 400; font-style: normal; text-decoration: none; font-family: 微软雅黑, sans-serif; text-align: general; vertical-align: middle; white-space: nowrap; border-left: medium none; border-right: .5pt solid windowtext; border-top: medium none; border-bottom: .5pt solid windowtext; padding-left: 1px; padding-right: 1px; padding-top: 1px"
+                            width="263" align="left">
+                            <p align="left">
+                                <font face="宋体" size="3">volume</font></td>
+                        <td style="color: black; font-size: 11.0pt; font-weight: 400; font-style: normal; text-decoration: none; font-family: 微软雅黑, sans-serif; text-align: general; vertical-align: middle; white-space: nowrap; border-left: medium none; border-right: .5pt solid windowtext; border-top: medium none; border-bottom: .5pt solid windowtext; padding-left: 1px; padding-right: 1px; padding-top: 1px"
+                            width="575" align="left">
+                            <p align="left">
+                                <font face="宋体" size="3">获取或者设置体元栅格数据集缓存。</font></td>
+                    </tr>
+                    <tr height="22" style="height:16.5pt">
+                        <td style="height: 33.0pt; font-weight: 700; color: black; font-size: 11.0pt; font-style: normal; text-decoration: none; font-family: 微软雅黑, sans-serif; vertical-align: middle; white-space: nowrap; border-left: .5pt solid windowtext; border-right: .5pt solid windowtext; border-top: medium none; border-bottom: .5pt solid windowtext; padding-left: 1px; padding-right: 1px; padding-top: 1px"
+                            width="261" align="left">
+                            <p align="left">
+                                <font face="宋体" size="3">SuperMapImageryProvider</font></td>
+                        <td style="color: black; font-size: 11.0pt; font-weight: 400; font-style: normal; text-decoration: none; font-family: 微软雅黑, sans-serif; text-align: general; vertical-align: middle; white-space: nowrap; border-left: medium none; border-right: .5pt solid windowtext; border-top: medium none; border-bottom: .5pt solid windowtext; padding-left: 1px; padding-right: 1px; padding-top: 1px"
+                            width="263" align="left">
+                            <p align="left">
+                                <font face="宋体" size="3">setLayerStatusParameters(v)</font></td>
+                        <td style="color: black; font-size: 11.0pt; font-weight: 400; font-style: normal; text-decoration: none; font-family: 微软雅黑, sans-serif; text-align: general; vertical-align: middle; white-space: nowrap; border-left: medium none; border-right: .5pt solid windowtext; border-top: medium none; border-bottom: .5pt solid windowtext; padding-left: 1px; padding-right: 1px; padding-top: 1px"
+                            width="575" align="left">
+                            <p align="left">
+                                <font face="宋体" size="3">设置地图子图层的过滤条件。</font></td>
+                    </tr>
+                </table>
+            </div>
+            </li>
+            </ul>
+        </div>
+    </div>
+
+    <div class="container ">
+        <br>
+        <br>
+        <!--<p style="margin-bottom: 24px">-->
+        <p class="lead" id="newAPI"><strong>2. 新增类接口说明： </strong></p>
+        <table class="MsoTableGrid" style="mso-border-alt: solid windowtext .5pt;
+						 mso-yfti-tbllook: 1184; mso-padding-alt: 0cm 5.4pt 0cm 5.4pt;
+						 border-collapse: separate; margin-left: 20px; left: 0px;
+						 top: 332px;" width="1096" cellspacing="0">
+            <col width="157"/>
+            <col width="216"/>
+            <col width="178"/>
+            <col width="262"/>
+            <tr style="mso-yfti-irow: 0; mso-yfti-firstrow: yes;">
+                <td style="border: Solid 1px #000000; vertical-align: top;
+							 mso-border-alt: solid windowtext .5pt; padding: 0cm 5.4pt 0cm 5.4pt;
+							 padding-left: 0px; padding-top: 0px; padding-right: 0px;
+							 padding-bottom: 0px;" align="center">
+                    <p style="text-align: left;
+														 margin-left: 0px">
+					<span
+                            style="font-family: 宋体; mso-ascii-font-family: Calibri;
+						 mso-ascii-theme-font: minor-latin; mso-fareast-font-family: 宋体;
+						 mso-fareast-theme-font: minor-fareast; mso-hansi-font-family: Calibri;
+						 mso-hansi-theme-font: minor-latin; color: #e16d6b; font-weight:700">类名称</span></p>
+                </td>
+                <td style="border-top: Solid 1px #000000; border-right: Solid 1px #000000;
+							 border-bottom: Solid 1px #000000; vertical-align: top;
+							 mso-border-left-alt: solid windowtext .5pt; mso-border-alt: solid windowtext .5pt;
+							 padding: 0cm 5.4pt 0cm 5.4pt; padding-left: 0px; padding-top: 0px;
+							 padding-right: 0px; padding-bottom: 0px;" align="center" width="236">
+                    <p
+                            style="text-align: left; margin-left: 0px">
+					<span
+                            style="font-family: 宋体; mso-ascii-font-family: Calibri;
+						 mso-ascii-theme-font: minor-latin; mso-fareast-font-family: 宋体;
+						 mso-fareast-theme-font: minor-fareast; mso-hansi-font-family: Calibri;
+						 mso-hansi-theme-font: minor-latin; color: #e16d6b; font-weight:700">类中文说明</span></p>
+                </td>
+                <td style="border-top: Solid 1px #000000; border-right: Solid 1px #000000;
+							 border-bottom: Solid 1px #000000; vertical-align: top;
+							 mso-border-left-alt: solid windowtext .5pt; mso-border-alt: solid windowtext .5pt;
+							 padding: 0cm 5.4pt 0cm 5.4pt; padding-left: 0px; padding-top: 0px;
+							 padding-right: 0px; padding-bottom: 0px;" align="center" width="267">
+                    <p
+                            style="text-align: left; margin-left: 0px">
+					<span
+                            style="font-family: 宋体; mso-ascii-font-family: Calibri;
+						 mso-ascii-theme-font: minor-latin; mso-fareast-font-family: 宋体;
+						 mso-fareast-theme-font: minor-fareast; mso-hansi-font-family: Calibri;
+						 mso-hansi-theme-font: minor-latin; color: #e16d6b; font-weight:700">接口名称</span></p>
+                </td>
+                <td style="border-top: Solid 1px #000000; border-right: Solid 1px #000000;
+							 border-bottom: Solid 1px #000000; vertical-align: top;
+							 mso-border-left-alt: solid windowtext .5pt; mso-border-alt: solid windowtext .5pt;
+							 padding: 0cm 5.4pt 0cm 5.4pt; padding-left: 0px; padding-top: 0px;
+							 padding-right: 0px; padding-bottom: 0px;" align="center" width="425">
+                    <p
+                            style="text-align: left; margin-left: 0px">
+					<span
+                            style="font-family: 宋体; mso-ascii-font-family: Calibri;
+						 mso-ascii-theme-font: minor-latin; mso-fareast-font-family: 宋体;
+						 mso-fareast-theme-font: minor-fareast; mso-hansi-font-family: Calibri;
+						 mso-hansi-theme-font: minor-latin; color: #e16d6b; font-weight:700">接口中文说明</span></p>
+                </td>
+            </tr>
+            <tr style="mso-yfti-irow: 5;">
+                <td rowspan="2" style="border-left: Solid 1px #000000;
+					 border-right: Solid 1px #000000; border-bottom: Solid 1px #000000;
+					 mso-border-top-alt: solid windowtext .5pt; mso-border-alt: solid windowtext .5pt;
+					 padding: 0cm 5.4pt 0cm 5.4pt; padding-left: 0px; padding-top: 0px;
+					 padding-right: 0px; padding-bottom: 0px;">
+                    <p
+                            style="layout-grid-mode: char; mso-layout-grid-align: none;
+					 margin-left: 0px;"><b><font face="宋体">
+                        <span lang="EN-US" xml:lang="EN-US">ControlMode</span></font></b></p>
+                </td>
+                <td rowspan="2" style="border-left: Solid 0px #000000;
+					 border-right: Solid 1px #000000; border-bottom: Solid 1px #000000;
+					 mso-border-top-alt: solid windowtext .5pt; mso-border-alt: solid windowtext .5pt;
+					 padding: 0cm 5.4pt 0cm 5.4pt; padding-left: 0px; padding-top: 0px;
+					 padding-right: 0px; padding-bottom: 0px;" width="236">
+                    <p
+                            style="layout-grid-mode: char; mso-layout-grid-align: none;
+					 margin-left: 0px;"><font face="宋体">
+                        <span lang="EN-US" xml:lang="EN-US">设置相机的操作模式</span></font></p>
+                </td>
+                <td style="border-right: Solid 1px #000000; border-bottom: Solid 1px #000000;
+					 vertical-align: top; mso-border-top-alt: solid windowtext .5pt;
+					 mso-border-left-alt: solid windowtext .5pt; mso-border-alt: solid windowtext .5pt;
+					 padding: 0cm 5.4pt 0cm 5.4pt; padding-left: 0px; padding-top: 0px;
+					 padding-right: 0px; padding-bottom: 0px;" width="267">
+                    <p
+                            style="layout-grid-mode: char; mso-layout-grid-align: none;
+					 margin-left: 0px;">
+					<span style="font-family: 宋体; mso-ascii-font-family: Calibri;
+												 mso-ascii-theme-font: minor-latin;
+												 mso-fareast-font-family: 宋体;
+												 mso-fareast-theme-font: minor-fareast;
+												 mso-hansi-font-family: Calibri;
+												 mso-hansi-theme-font: minor-latin;">DESIGN: 0</span></p>
+                </td>
+                <td style="border-right: Solid 1px #000000; border-bottom: Solid 1px #000000;
+					 vertical-align: top; mso-border-top-alt: solid windowtext .5pt;
+					 mso-border-left-alt: solid windowtext .5pt; mso-border-alt: solid windowtext .5pt;
+					 padding: 0cm 5.4pt 0cm 5.4pt; padding-left: 0px; padding-top: 0px;
+					 padding-right: 0px; padding-bottom: 0px;" width="425">
+                    <p
+                            style="layout-grid-mode: char; mso-layout-grid-align: none;
+					 margin-left: 0px;">
+					<span style="font-family: 宋体; mso-ascii-font-family: Calibri;
+												 mso-ascii-theme-font: minor-latin;
+												 mso-fareast-font-family: 宋体;
+												 mso-fareast-theme-font: minor-fareast;
+												 mso-hansi-font-family: Calibri;
+												 mso-hansi-theme-font: minor-latin;">相机操作以屏幕中心为原点。</span></p>
+                </td>
+            </tr>
+            <tr style="mso-yfti-irow: 1;">
+                <td style="border-right: Solid 1px #000000; border-bottom: Solid 1px #000000;
+					 vertical-align: top; mso-border-top-alt: solid windowtext .5pt;
+					 mso-border-left-alt: solid windowtext .5pt; mso-border-alt: solid windowtext .5pt;
+					 padding: 0cm 5.4pt 0cm 5.4pt; padding-left: 0px; padding-top: 0px;
+					 padding-right: 0px; padding-bottom: 0px;" width="267">
+                    <p
+                            style="layout-grid-mode: char; mso-layout-grid-align: none;
+					 margin-left: 0px;">
+					<span style="font-family: 宋体; mso-ascii-font-family: Calibri;
+												 mso-ascii-theme-font: minor-latin;
+												 mso-fareast-font-family: 宋体;
+												 mso-fareast-theme-font: minor-fareast;
+												 mso-hansi-font-family: Calibri;
+												 mso-hansi-theme-font: minor-latin;">NORMAL: 1</span></p>
+                </td>
+                <td style="border-right: Solid 1px #000000; border-bottom: Solid 1px #000000;
+							 vertical-align: top; mso-border-top-alt: solid windowtext .5pt;
+							 mso-border-left-alt: solid windowtext .5pt; mso-border-alt: solid windowtext .5pt;
+							 padding: 0cm 5.4pt 0cm 5.4pt; padding-left: 0px; padding-top: 0px;
+							 padding-right: 0px; padding-bottom: 0px;" width="425">
+                    <p
+                            style="layout-grid-mode: char; mso-layout-grid-align: none;
+							 margin-left: 0px;">
+					<span style="font-family: 宋体; mso-ascii-font-family: Calibri;
+														 mso-ascii-theme-font: minor-latin;
+														 mso-fareast-font-family: 宋体;
+														 mso-fareast-theme-font: minor-fareast;
+														 mso-hansi-font-family: Calibri;
+														 mso-hansi-theme-font: minor-latin;">相机操作以鼠标位置点为原点。</span></p>
+                </td>
+            </tr>
+
+
+
+
+
+
+            <tr style="mso-yfti-irow: 5;">
+                <td rowspan="3" style="border-left: Solid 1px #000000;
+					 border-right: Solid 1px #000000; border-bottom: Solid 1px #000000;
+					 mso-border-top-alt: solid windowtext .5pt; mso-border-alt: solid windowtext .5pt;
+					 padding: 0cm 5.4pt 0cm 5.4pt; padding-left: 0px; padding-top: 0px;
+					 padding-right: 0px; padding-bottom: 0px;">
+                    <p
+                            style="layout-grid-mode: char; mso-layout-grid-align: none;
+					 margin-left: 0px;"><b><font face="宋体">
+                        <span lang="EN-US" xml:lang="EN-US">cloudBox</span></font></b></p>
+                </td>
+                <td rowspan="3" style="border-left: Solid 0px #000000;
+					 border-right: Solid 1px #000000; border-bottom: Solid 1px #000000;
+					 mso-border-top-alt: solid windowtext .5pt; mso-border-alt: solid windowtext .5pt;
+					 padding: 0cm 5.4pt 0cm 5.4pt; padding-left: 0px; padding-top: 0px;
+					 padding-right: 0px; padding-bottom: 0px;" width="236">
+                    <p
+                            style="layout-grid-mode: char; mso-layout-grid-align: none;
+					 margin-left: 0px;"><font face="宋体">
+                        <span lang="EN-US" xml:lang="EN-US">云层类</span></font></p>
+                </td>
+                <td style="border-right: Solid 1px #000000; border-bottom: Solid 1px #000000;
+					 vertical-align: top; mso-border-top-alt: solid windowtext .5pt;
+					 mso-border-left-alt: solid windowtext .5pt; mso-border-alt: solid windowtext .5pt;
+					 padding: 0cm 5.4pt 0cm 5.4pt; padding-left: 0px; padding-top: 0px;
+					 padding-right: 0px; padding-bottom: 0px;" width="267">
+                    <p
+                            style="layout-grid-mode: char; mso-layout-grid-align: none;
+					 margin-left: 0px;">
+					<span style="font-family: 宋体; mso-ascii-font-family: Calibri;
+												 mso-ascii-theme-font: minor-latin;
+												 mso-fareast-font-family: 宋体;
+												 mso-fareast-theme-font: minor-fareast;
+												 mso-hansi-font-family: Calibri;
+												 mso-hansi-theme-font: minor-latin;">CloudBox(url)</span></p>
+                </td>
+                <td style="border-right: Solid 1px #000000; border-bottom: Solid 1px #000000;
+					 vertical-align: top; mso-border-top-alt: solid windowtext .5pt;
+					 mso-border-left-alt: solid windowtext .5pt; mso-border-alt: solid windowtext .5pt;
+					 padding: 0cm 5.4pt 0cm 5.4pt; padding-left: 0px; padding-top: 0px;
+					 padding-right: 0px; padding-bottom: 0px;" width="425">
+                    <p
+                            style="layout-grid-mode: char; mso-layout-grid-align: none;
+					 margin-left: 0px;">
+					<span style="font-family: 宋体; mso-ascii-font-family: Calibri;
+												 mso-ascii-theme-font: minor-latin;
+												 mso-fareast-font-family: 宋体;
+												 mso-fareast-theme-font: minor-fareast;
+												 mso-hansi-font-family: Calibri;
+												 mso-hansi-theme-font: minor-latin;">给场景添加云层。</span></p>
+                </td>
+            </tr>
+            <tr style="mso-yfti-irow: 1;">
+                <td style="border-right: Solid 1px #000000; border-bottom: Solid 1px #000000;
+					 vertical-align: top; mso-border-top-alt: solid windowtext .5pt;
+					 mso-border-left-alt: solid windowtext .5pt; mso-border-alt: solid windowtext .5pt;
+					 padding: 0cm 5.4pt 0cm 5.4pt; padding-left: 0px; padding-top: 0px;
+					 padding-right: 0px; padding-bottom: 0px;" width="267">
+                    <p
+                            style="layout-grid-mode: char; mso-layout-grid-align: none;
+					 margin-left: 0px;">
+					<span style="font-family: 宋体; mso-ascii-font-family: Calibri;
+												 mso-ascii-theme-font: minor-latin;
+												 mso-fareast-font-family: 宋体;
+												 mso-fareast-theme-font: minor-fareast;
+												 mso-hansi-font-family: Calibri;
+												 mso-hansi-theme-font: minor-latin;">destroy</span></p>
+                </td>
+                <td style="border-right: Solid 1px #000000; border-bottom: Solid 1px #000000;
+							 vertical-align: top; mso-border-top-alt: solid windowtext .5pt;
+							 mso-border-left-alt: solid windowtext .5pt; mso-border-alt: solid windowtext .5pt;
+							 padding: 0cm 5.4pt 0cm 5.4pt; padding-left: 0px; padding-top: 0px;
+							 padding-right: 0px; padding-bottom: 0px;" width="425">
+                    <p
+                            style="layout-grid-mode: char; mso-layout-grid-align: none;
+							 margin-left: 0px;">
+					<span style="font-family: 宋体; mso-ascii-font-family: Calibri;
+														 mso-ascii-theme-font: minor-latin;
+														 mso-fareast-font-family: 宋体;
+														 mso-fareast-theme-font: minor-fareast;
+														 mso-hansi-font-family: Calibri;
+														 mso-hansi-theme-font: minor-latin;">销毁对象并释放WebGL资源。</span></p>
+                </td>
+            </tr>
+            <tr style="mso-yfti-irow: 1;">
+                <td style="border-right: Solid 1px #000000; border-bottom: Solid 1px #000000;
+					 vertical-align: top; mso-border-top-alt: solid windowtext .5pt;
+					 mso-border-left-alt: solid windowtext .5pt; mso-border-alt: solid windowtext .5pt;
+					 padding: 0cm 5.4pt 0cm 5.4pt; padding-left: 0px; padding-top: 0px;
+					 padding-right: 0px; padding-bottom: 0px;" width="267">
+                    <p
+                            style="layout-grid-mode: char; mso-layout-grid-align: none;
+					 margin-left: 0px;">
+					<span style="font-family: 宋体; mso-ascii-font-family: Calibri;
+												 mso-ascii-theme-font: minor-latin;
+												 mso-fareast-font-family: 宋体;
+												 mso-fareast-theme-font: minor-fareast;
+												 mso-hansi-font-family: Calibri;
+												 mso-hansi-theme-font: minor-latin;">url</span></p>
+                </td>
+                <td style="border-right: Solid 1px #000000; border-bottom: Solid 1px #000000;
+							 vertical-align: top; mso-border-top-alt: solid windowtext .5pt;
+							 mso-border-left-alt: solid windowtext .5pt; mso-border-alt: solid windowtext .5pt;
+							 padding: 0cm 5.4pt 0cm 5.4pt; padding-left: 0px; padding-top: 0px;
+							 padding-right: 0px; padding-bottom: 0px;" width="425">
+                    <p
+                            style="layout-grid-mode: char; mso-layout-grid-align: none;
+							 margin-left: 0px;">
+					<span style="font-family: 宋体; mso-ascii-font-family: Calibri;
+														 mso-ascii-theme-font: minor-latin;
+														 mso-fareast-font-family: 宋体;
+														 mso-fareast-theme-font: minor-fareast;
+														 mso-hansi-font-family: Calibri;
+														 mso-hansi-theme-font: minor-latin;">获取或者设置拟添加的云层图片的地址。</span></p>
+                </td>
+            </tr>
+
+
+            <tr>
+                <td rowspan="2" style="border-left: Solid 1px #000000;
+					 border-right: Solid 1px #000000; border-bottom: Solid 1px #000000;
+					 mso-border-top-alt: solid windowtext .5pt; mso-border-alt: solid windowtext .5pt;
+					 padding: 0cm 5.4pt 0cm 5.4pt; padding-left: 0px; padding-top: 0px;
+					 padding-right: 0px; padding-bottom: 0px;">
+                    <p
+                            style="layout-grid-mode: char; mso-layout-grid-align: none;
+					 margin-left: 0px;"><b><font face="宋体">
+                        <span lang="EN-US" xml:lang="EN-US">Volume</span></font></b></p>
+                </td>
+                <td rowspan="2" style="border-left: Solid 0px #000000;
+					 border-right: Solid 1px #000000; border-bottom: Solid 1px #000000;
+					 mso-border-top-alt: solid windowtext .5pt; mso-border-alt: solid windowtext .5pt;
+					 padding: 0cm 5.4pt 0cm 5.4pt; padding-left: 0px; padding-top: 0px;
+					 padding-right: 0px; padding-bottom: 0px;" width="236">
+                    <p
+                            style="layout-grid-mode: char; mso-layout-grid-align: none;
+					 margin-left: 0px;"><font face="宋体">
+                        <span lang="EN-US" xml:lang="EN-US">体元栅格数据集缓存类</span></font></p>
+                </td>
+                <td style="border-right: Solid 1px #000000; border-bottom: Solid 1px #000000;
+					 vertical-align: top; mso-border-top-alt: solid windowtext .5pt;
+					 mso-border-left-alt: solid windowtext .5pt; mso-border-alt: solid windowtext .5pt;
+					 padding: 0cm 5.4pt 0cm 5.4pt; padding-left: 0px; padding-top: 0px;
+					 padding-right: 0px; padding-bottom: 0px;" width="267">
+                    <p
+                            style="layout-grid-mode: char; mso-layout-grid-align: none;
+					 margin-left: 0px;">
+					<span style="font-family: 宋体; mso-ascii-font-family: Calibri;
+												 mso-ascii-theme-font: minor-latin;
+												 mso-fareast-font-family: 宋体;
+												 mso-fareast-theme-font: minor-fareast;
+												 mso-hansi-font-family: Calibri;
+												 mso-hansi-theme-font: minor-latin;">Volume(options)</span></p>
+                </td>
+                <td style="border-right: Solid 1px #000000; border-bottom: Solid 1px #000000;
+					 vertical-align: top; mso-border-top-alt: solid windowtext .5pt;
+					 mso-border-left-alt: solid windowtext .5pt; mso-border-alt: solid windowtext .5pt;
+					 padding: 0cm 5.4pt 0cm 5.4pt; padding-left: 0px; padding-top: 0px;
+					 padding-right: 0px; padding-bottom: 0px;" width="425">
+                    <p
+                            style="layout-grid-mode: char; mso-layout-grid-align: none;
+					 margin-left: 0px;">
+					<span style="font-family: 宋体; mso-ascii-font-family: Calibri;
+												 mso-ascii-theme-font: minor-latin;
+												 mso-fareast-font-family: 宋体;
+												 mso-fareast-theme-font: minor-fareast;
+												 mso-hansi-font-family: Calibri;
+												 mso-hansi-theme-font: minor-latin;">添加由iserver动态发布的体元栅格数据集的缓存。</span></p>
+                </td>
+            </tr>
+            <tr style="mso-yfti-irow: 1;">
+                <td style="border-right: Solid 1px #000000; border-bottom: Solid 1px #000000;
+					 vertical-align: top; mso-border-top-alt: solid windowtext .5pt;
+					 mso-border-left-alt: solid windowtext .5pt; mso-border-alt: solid windowtext .5pt;
+					 padding: 0cm 5.4pt 0cm 5.4pt; padding-left: 0px; padding-top: 0px;
+					 padding-right: 0px; padding-bottom: 0px;" width="267">
+                    <p
+                            style="layout-grid-mode: char; mso-layout-grid-align: none;
+					 margin-left: 0px;">
+					<span style="font-family: 宋体; mso-ascii-font-family: Calibri;
+												 mso-ascii-theme-font: minor-latin;
+												 mso-fareast-font-family: 宋体;
+												 mso-fareast-theme-font: minor-fareast;
+												 mso-hansi-font-family: Calibri;
+												 mso-hansi-theme-font: minor-latin;">getValue(position)</span></p>
+                </td>
+                <td style="border-right: Solid 1px #000000; border-bottom: Solid 1px #000000;
+							 vertical-align: top; mso-border-top-alt: solid windowtext .5pt;
+							 mso-border-left-alt: solid windowtext .5pt; mso-border-alt: solid windowtext .5pt;
+							 padding: 0cm 5.4pt 0cm 5.4pt; padding-left: 0px; padding-top: 0px;
+							 padding-right: 0px; padding-bottom: 0px;" width="425">
+                    <p
+                            style="layout-grid-mode: char; mso-layout-grid-align: none;
+							 margin-left: 0px;">
+					<span style="font-family: 宋体; mso-ascii-font-family: Calibri;
+														 mso-ascii-theme-font: minor-latin;
+														 mso-fareast-font-family: 宋体;
+														 mso-fareast-theme-font: minor-fareast;
+														 mso-hansi-font-family: Calibri;
+														 mso-hansi-theme-font: minor-latin;">获取指定位置上属性的值。</span></p>
+                </td>
+            </tr>
+
+            <tr>
+            <td rowspan="1" style="border-left: Solid 1px #000000;
+					 border-right: Solid 1px #000000; border-bottom: Solid 1px #000000;
+					 mso-border-top-alt: solid windowtext .5pt; mso-border-alt: solid windowtext .5pt;
+					 padding: 0cm 5.4pt 0cm 5.4pt; padding-left: 0px; padding-top: 0px;
+					 padding-right: 0px; padding-bottom: 0px;">
+                <p
+                        style="layout-grid-mode: char; mso-layout-grid-align: none;
+					 margin-left: 0px;"><b><font face="宋体">
+                    <span lang="EN-US" xml:lang="EN-US">TiandituTerrainProvider</span></font></b></p>
+            </td>
+            <td rowspan="1" style="border-left: Solid 0px #000000;
+					 border-right: Solid 1px #000000; border-bottom: Solid 1px #000000;
+					 mso-border-top-alt: solid windowtext .5pt; mso-border-alt: solid windowtext .5pt;
+					 padding: 0cm 5.4pt 0cm 5.4pt; padding-left: 0px; padding-top: 0px;
+					 padding-right: 0px; padding-bottom: 0px;" width="236">
+                <p
+                        style="layout-grid-mode: char; mso-layout-grid-align: none;
+					 margin-left: 0px;"><font face="宋体">
+                    <span lang="EN-US" xml:lang="EN-US">天地图三维地形服务类</span></font></p>
+            </td>
+            <td style="border-right: Solid 1px #000000; border-bottom: Solid 1px #000000;
+					 vertical-align: top; mso-border-top-alt: solid windowtext .5pt;
+					 mso-border-left-alt: solid windowtext .5pt; mso-border-alt: solid windowtext .5pt;
+					 padding: 0cm 5.4pt 0cm 5.4pt; padding-left: 0px; padding-top: 0px;
+					 padding-right: 0px; padding-bottom: 0px;" width="267">
+                <p
+                        style="layout-grid-mode: char; mso-layout-grid-align: none;
+					 margin-left: 0px;">
+					<span style="font-family: 宋体; mso-ascii-font-family: Calibri;
+												 mso-ascii-theme-font: minor-latin;
+												 mso-fareast-font-family: 宋体;
+												 mso-fareast-theme-font: minor-fareast;
+												 mso-hansi-font-family: Calibri;
+												 mso-hansi-theme-font: minor-latin;">TiandituTerrainProvider(options)</span>
+                </p>
+            </td>
+            <td style="border-right: Solid 1px #000000; border-bottom: Solid 1px #000000;
+					 vertical-align: top; mso-border-top-alt: solid windowtext .5pt;
+					 mso-border-left-alt: solid windowtext .5pt; mso-border-alt: solid windowtext .5pt;
+					 padding: 0cm 5.4pt 0cm 5.4pt; padding-left: 0px; padding-top: 0px;
+					 padding-right: 0px; padding-bottom: 0px;" width="425">
+                <p
+                        style="layout-grid-mode: char; mso-layout-grid-align: none;
+					 margin-left: 0px;">
+					<span style="font-family: 宋体; mso-ascii-font-family: Calibri;
+												 mso-ascii-theme-font: minor-latin;
+												 mso-fareast-font-family: 宋体;
+												 mso-fareast-theme-font: minor-fareast;
+												 mso-hansi-font-family: Calibri;
+												 mso-hansi-theme-font: minor-latin;">添加由天地图服务器发布的三维地形服务。</span></p>
+            </td>
+            </tr>
+
+
+        </table>
+        <p class="MsoNormal" style="margin-right: 0in; margin-top: 0pt;
+			 margin-bottom: 0pt; margin-left: 40px;">&#160;</p>
+        <div>
+            <p class="lead"><strong>3. 新增范例： </strong></p>
+            <ul>
+                <li>(1) s3m图标随着文字避让</li>
+                <li>(2) Echarts之模拟迁徙</li>
+                <li>(3) Echarts之全国主要城市空气质量</li>
+                <li>(4) BIM模型光照优化</li>
+                <li>(5) 云层</li>
+                <li>(6) 根据指定字段制作专题图</li>
+                <li>(7) ArcGISServer</li>
+                <li>(8) 填挖方分析</li>
+                <li>(9) mvt、地形、影像、s3m图层支持多子域</li>
+                <li>(10) 多路视频投放</li>
+                <li>(11) 地质体叠加体元栅格</li>
+            </ul>
+            <p class="lead"><strong>4. 优化及问题修复： </strong></p>
+            <ul>
+                <li>(1) 优化了地形影像加载性能。</li>
+                <li>(2) 优化了扫描线效果，可叠加纹理。</li>
+                <li>(3) 优化了模型边框线的效果。</li>
+                <li>(4) 优化了点标号性能。</li>
+            </ul>
+        </div>
+        <hr>
+        <div>
+            <p>本文档完成日期为2020年12月21日，如果此前的任何文档(包括电子文档和印刷文档)中的某些内容与本文档不相符合，请以本文档为准。若本文档更新，则以更新后的文档为准。</p>
+        </div>
+    </div>
+
+
+    <!-- <div style="bottom: 1%; margin-right:0; width: 57px; height: 57px; overflow: hidden; cursor: pointer; left: 50%; -webkit-transition: opacity; position: fixed; opacity: 0.6; display: block; " id="qBack2topBtn">
+        <div class="back2top-icon-real"></div>
+    </div> -->
+</div>
+<!--footer-->
+<footer class="main-footer icl-footer"></footer>
+<script>
+    utils.loadTemplate(".icl-footer", "./template/footer.html", navigation);
+
+</script>
+<!--footer end-->
+<script type="text/javascript" src="./js/common.js"></script>
+<script>
+    var myLazyLoad = new LazyLoad({
+        elements_selector: "iframe"
+    });
+</script>
+</body>
+</html>

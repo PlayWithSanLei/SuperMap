@@ -1,0 +1,81 @@
+<!DOCTYPE html>
+<html>
+
+	<head>
+		<meta charset="utf-8">
+		<meta http-equiv="X-UA-Compatible" content="IE=edge">
+		<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, minimum-scale=1, user-scalable=no">
+		<title>GLTF</title>
+		<link href="../../Build/Cesium/Widgets/widgets.css" rel="stylesheet">
+		<link href="./css/bootstrap.min.css" rel="stylesheet">
+		<link href="./css/pretty.css" rel="stylesheet">
+		<script src="./js/jquery.min.js"></script>
+		<script src="./js/bootstrap.min.js"></script>
+		<script src="./js/bootstrap-select.min.js"></script>
+		<script src="./js/config.js"></script>
+		<script type="text/javascript" src="../../Build/Cesium/Cesium.js"></script>
+		<style>
+			html,
+			body,
+			#cesiumContainer {
+				width: 100%;
+				height: 100%;
+				margin: 0;
+				padding: 0;
+				overflow: hidden;
+			}
+		</style>
+	</head>
+	<body>
+		<div id="cesiumContainer"></div>
+		<div id="toolbar" class="param-container tool-bar">
+			<div style="width:215px;">
+				<select id="selOpt" class="selectpicker show-tick form-control">
+					<option selected value = "1">实体方式加载</option>
+					<option value="2">实例化方式加载</option>
+				</select>
+			</div>
+		</div>
+		<script>
+			function onload(Cesium) {
+				var viewer = new Cesium.Viewer('cesiumContainer', {
+					shouldAnimate: true
+				});
+
+                var scene = viewer.scene;
+                scene.globe.show = false;
+                var collect = new Cesium.InstanceLayer(scene._context);
+                scene.primitives.add(collect);
+                var url = "./SampleData/gltf/man/walk.gltf";
+                var gltf = viewer.entities.add({
+                    name: "gltf",
+                    position: new Cesium.Cartesian3.fromDegrees(116.458110477583400 - 0.002034006, 39.912527169275549 - 0.005072179, 0),
+                    model: {
+                        uri: url
+                    }
+                });
+                viewer.zoomTo(gltf);
+
+				$("#selOpt").change(function() {
+                    var value = $(this).val();
+                    if (value === "1") {
+                        collect.removeInstance(url, [collect._instances._array[0]._array[0].id]);
+                        viewer.entities._show = true;
+                    } else {
+                        viewer.entities._show = false;
+                        collect.add(url,
+                            {
+                                position: new Cesium.Cartesian3.fromDegrees(116.458110477583400 - 0.002034006, 39.912527169275549 - 0.005072179, 0)
+                            });
+
+                    }
+                })
+			}
+			if (typeof Cesium !== 'undefined') {
+				window.startupCalled = true;
+				onload(Cesium);
+			}
+		</script>
+	</body>
+
+</html>

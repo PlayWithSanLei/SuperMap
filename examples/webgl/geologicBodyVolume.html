@@ -1,0 +1,255 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=Edge,chrome=1">
+    <meta name="viewport"
+          content="width=device-width, initial-scale=1, maximum-scale=1, minimum-scale=1, user-scalable=no">
+    <title>地质体叠加体元栅格</title>
+    <link href="../../Build/Cesium/Widgets/widgets.css" rel="stylesheet">
+    <link href="./css/pretty.css" rel="stylesheet">
+    <script src="./js/jquery.min.js"></script>
+    <script src="./js/config.js"></script>
+    <script src="./js/bootstrap.min.js"></script>
+    <script src="./js/bootstrap-select.min.js"></script>
+    <script src="./js/bootstrap-treeview.js"></script>
+    <script src="./js/tooltip.js"></script>
+    <script type="text/javascript" src="../../Build/Cesium/Cesium.js"></script>
+</head>
+<body>
+<div id="cesiumContainer"></div>
+<div id='loadingbar' class="spinner">
+    <div class="spinner-container container1">
+        <div class="circle1"></div>
+        <div class="circle2"></div>
+        <div class="circle3"></div>
+        <div class="circle4"></div>
+    </div>
+    <div class="spinner-container container2">
+        <div class="circle1"></div>
+        <div class="circle2"></div>
+        <div class="circle3"></div>
+        <div class="circle4"></div>
+    </div>
+    <div class="spinner-container container3">
+        <div class="circle1"></div>
+        <div class="circle2"></div>
+        <div class="circle3"></div>
+        <div class="circle4"></div>
+    </div>
+</div>
+
+<div id="toolbar" class="param-container tool-bar">
+    <button id="clip" class="button black" type="button">剖切</button>
+    <button id="clear" class="button black" type="button">清除</button>
+</div>
+<script>
+    function onload(Cesium) {
+        var viewer = new Cesium.Viewer('cesiumContainer', {});
+        window.scene = viewer.scene;
+        scene.logarithmicDepthBuffer = true;
+        scene.camera.frustum.near = 0.1;
+        scene.globe.show = false;
+
+        var tooltip = createTooltip(document.body);
+
+
+        colors = ["#ffff99",
+            "#ffcc99",
+            "#ff9999",
+            "#ff99cc",
+            "#ffcc00",
+            "#ff6600",
+            "#777777",
+            "#ff66cc",
+            "#cc66ff",
+            "#66ccff",
+            "#66ffff",
+            "#66ff66",
+            "#99cc00",
+            "#cccc00"];
+        values = [1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14];
+        var colorTable = new Cesium.ColorTable();
+
+        colorTable.insert(values[0], new Cesium.Color.fromCssColorString(colors[0]));
+        for (var j = 1; j < values.length - 1; j++) {
+            colorTable.insert(values[j], new Cesium.Color.fromCssColorString(colors[j]));
+        }
+        colorTable.insert(values[values.length - 1], new Cesium.Color.fromCssColorString(colors[values.length - 1]));
+
+
+        var hyp = new Cesium.HypsometricSetting();
+        hyp.ColorTable = colorTable;
+        hyp.ColorTable.generateBuffer();
+        hyp.DisplayMode = Cesium.HypsometricSettingEnum.DisplayMode.FACE;
+        hyp.Opacity = 1;
+        //体元栅格采样方式：1为临近采样；0为线性采样
+        hyp.filterMode = 0;
+
+
+        hyp.ColorTableMaxKey = values[13];
+        hyp.ColorTableMinKey = values[0];
+
+        hyp.MaxVisibleValue = values[13];
+        hyp.MinVisibleValue = values[0];
+
+
+        //加载地质体模型
+        var models = [];
+        for (var i = 1; i < 6; i++) {
+            models.push({
+                id: i,
+                model: "http://www.supermapol.com/realspace/services/3D-DiZhiTiDieJiaTiYuanZhaGe/rest/data/datasources/Text/datasets/%E5%9C%B0%E8%B4%A8%E4%BD%93%E6%A8%A1%E5%9E%8B/features/" + i + ".stream",
+                // color: new Cesium.Color(179 / 255, 179 / 255, 179 / 255, 1)// 也可以不设置纹理，设置颜色
+            })
+        }
+
+
+        var solidModelsProfile = new Cesium.SolidModelsProfile(scene);
+        //叠加体元栅格
+        var vol = new Cesium.Volume({
+            url: 'http://www.supermapol.com/realspace/services/3D-DiZhiTiDieJiaTiYuanZhaGe/rest/realspace/datas/DatasetVolume5@Text',
+            hypsometricSetting: hyp
+        });
+        solidModelsProfile.volume = vol;//设置地质体的体元栅格
+
+        scene.camera.setView({
+            destination: new Cesium.Cartesian3(-2116559.9103919305, 5478619.97690452, 2488325.171566801),
+            orientation: {
+                heading: 1.5713649534647391,
+                pitch: -0.71253979316776,
+                roll: 0
+            }
+        });
+
+        showModel();
+
+        function showModel() {
+            solidModelsProfile.addModels(models);
+
+            //点击查询体元强度值
+            var handler = new Cesium.ScreenSpaceEventHandler(scene.canvas);
+            handler.setInputAction(function (e) {
+                let position = scene.pickPosition(e.position);
+                var value = solidModelsProfile.volume.getValue(position);
+
+                var entity = new Cesium.Entity({
+                    name: "",
+                    description: createDescription(Cesium, [value])
+                });
+                viewer.selectedEntity = entity;
+
+            }, Cesium.ScreenSpaceEventType.LEFT_CLICK);
+
+
+        }
+
+        //创建描述位置的对话框
+        function createDescription(Cesium, properties) {
+            var simpleStyleIdentifiers = ['强度值：'];
+            var html = '';
+            for (var key in properties) {
+                if (properties.hasOwnProperty(key)) {
+                    if (simpleStyleIdentifiers.indexOf(key) !== -1) {
+                        continue;
+                    }
+                    var value = properties[key];
+                    if (Cesium.defined(value) && value !== '') {
+                        html += '<tr><td>' + simpleStyleIdentifiers[key] + '</td><td>' + value + '</td></tr>';
+                    }
+                }
+            }
+            if (html.length > 0) {
+                html = '<table class="zebra"><tbody>' + html + '</tbody></table>';
+            }
+            return html;
+        }
+
+
+        $("#clip").click(function () {
+            handlerPolygon.activate();
+        })
+
+        //清除剖切结果
+        $('#clear').click(function () {
+            solidModelsProfile.clearProfile();
+            handlerPolygon.deactivate();
+            handlerPolygon.clear();
+            tooltip.setVisible(false);
+        });
+
+        //绘制裁剪面
+        var handlerPolygon = new Cesium.DrawHandler(viewer, Cesium.DrawMode.Polygon);
+        handlerPolygon.activeEvt.addEventListener(function (isActive) {
+            if (isActive == true) {
+                viewer.enableCursorStyle = false;
+                viewer._element.style.cursor = '';
+                $('body').removeClass('drawCur').addClass('drawCur');
+            } else {
+                viewer.enableCursorStyle = true;
+                $('body').removeClass('drawCur');
+            }
+        });
+
+        handlerPolygon.drawEvt.addEventListener(function (res) {
+            var point3dsArray = [];
+            var polygon = res.object;
+            var positions = [].concat(polygon.positions);
+            var point3ds = new Cesium.Point3Ds();
+
+            for (var i = 0; i < positions.length; i++) {
+                var cartographic = Cesium.Cartographic.fromCartesian(positions[i]);
+                var pntx = Cesium.Math.toDegrees(cartographic.longitude);
+                var pnty = Cesium.Math.toDegrees(cartographic.latitude);
+                var pntz = cartographic.height + 1000;
+                var pnt = new Cesium.Point3D(pntx, pnty, pntz);
+
+                point3ds.add(pnt);
+            }
+            point3dsArray.push(point3ds);
+            var geometry = new Cesium.GeoRegion3D(point3dsArray);
+            if (solidModelsProfile.clippingType == Cesium.ClippingType.KeepOutside) {
+                geometry.extrudedHeight = 5000;
+            } else {
+                geometry.extrudedHeight = -7000;
+            }
+
+            geometry.isLatLon = false;
+            solidModelsProfile.setClipGeometry(geometry);
+
+            // //封底
+            var geometry2 = new Cesium.GeoRegion3D(point3dsArray);
+            geometry2.isLatLon = false;
+            if (solidModelsProfile.clippingType == Cesium.ClippingType.KeepOutside) {
+                geometry2.bottomAltitude = geometry.extrudedHeight;
+                solidModelsProfile.addProfileGeometry(geometry2);
+            }
+
+            for (var i = 0; i < positions.length; i++) {
+                var singleA = [];
+                singleA.push(positions[i]);
+
+                if (i == positions.length - 1) {
+                    singleA.push(positions[0]);
+                } else {
+                    singleA.push(positions[i + 1]);
+                }
+                solidModelsProfile.addProfileGeometry(singleA);
+                solidModelsProfile.build();
+            }
+
+            handlerPolygon.clear();
+            handlerPolygon.deactivate();
+        })
+
+
+        $('#loadingbar').remove();
+    }
+
+    if (typeof Cesium !== 'undefined') {
+        window.startupCalled = true;
+        onload(Cesium);
+    }
+</script>
+</body>
+</html>

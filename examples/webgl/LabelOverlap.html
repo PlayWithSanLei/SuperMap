@@ -1,0 +1,110 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=Edge,chrome=1">
+    <meta name="viewport"
+          content="width=device-width, initial-scale=1, maximum-scale=1, minimum-scale=1, user-scalable=no">
+    <title>s3m图标随着文字避让</title>
+    <link href="../../Build/Cesium/Widgets/widgets.css" rel="stylesheet">
+    <link href="./css/pretty.css" rel="stylesheet">
+    <script src="./js/jquery.min.js"></script>
+    <script src="./js/config.js"></script>
+    <script type="text/javascript" src="../../Build/Cesium/Cesium.js"></script>
+
+    <style>
+        html, body, #cesiumContainer {
+            width: 100%;
+            height: 100%;
+            margin: 0;
+            padding: 0;
+            overflow: hidden;
+            background-color: #000000;
+        }
+
+        #float {
+            position: fixed;
+        }
+    </style>
+</head>
+<body>
+<div id="cesiumContainer"></div>
+
+
+<div id='toolbar' class="param-container tool-bar">
+    <div class="param-item">
+        <label for="icon">s3m图标随文字避让</label>
+        <input type="checkbox" id="icon">
+    </div>
+
+</div>
+
+<div id='loadingbar' class="spinner">
+    <div class="spinner-container container1">
+        <div class="circle1"></div>
+        <div class="circle2"></div>
+        <div class="circle3"></div>
+        <div class="circle4"></div>
+    </div>
+    <div class="spinner-container container2">
+        <div class="circle1"></div>
+        <div class="circle2"></div>
+        <div class="circle3"></div>
+        <div class="circle4"></div>
+    </div>
+    <div class="spinner-container container3">
+        <div class="circle1"></div>
+        <div class="circle2"></div>
+        <div class="circle3"></div>
+        <div class="circle4"></div>
+    </div>
+</div>
+<script type="text/javascript">
+    function onload(Cesium) {
+        //初始化viewer部件
+        var viewer = new Cesium.Viewer('cesiumContainer');
+        //添加SuperMap iServer发布的影像服务
+        viewer.imageryLayers.addImageryProvider(new Cesium.BingMapsImageryProvider({
+            key: URL_CONFIG.BING_MAP_KEY,//可至官网（https://www.bingmapsportal.com/）申请key
+            url: URL_CONFIG.BINGMAP
+        }));
+        var scene = viewer.scene;
+        $('#loadingbar').remove();
+
+        //添加S3M图层服务
+        var curlayer;
+        var promise = viewer.scene.open('http://www.supermapol.com/realspace/services/3D-NewBus/rest/realspace');
+        promise.then(function (layers) {
+            var iconlayer = scene.layers.find('BusPoint@RealspaceSample');//图标图层
+            var textlayer = scene.layers.find('BusPoint@RealspaceSample#1');//文字图层
+
+            iconlayer.isOverlapDisplayed = true;//关闭避让
+            textlayer.isOverlapDisplayed = true;//关闭避让
+
+
+            // scene.overlapDisplayedThreshold = 10;//避让阈值,单位是像素
+
+            $("#icon").on("input change", function () {
+                var show = this.checked;
+                if (show) {
+                    iconlayer.isOverlapDisplayed = !show;//开启避让
+                    textlayer.isOverlapDisplayed = !show;//开启避让
+
+                    iconlayer.iconRelatedTextLayerID = textlayer.id;//图标随着文字避让而避让
+                } else {
+                    iconlayer.isOverlapDisplayed = !show;//关闭避让
+                    textlayer.isOverlapDisplayed = !show;//关闭避让
+
+                    iconlayer.iconRelatedTextLayerID = undefined;
+                }
+            });
+        });
+    }
+
+    if (typeof Cesium !== 'undefined') {
+        window.startupCalled = true;
+        onload(Cesium);
+    }
+</script>
+</body>
+</html>

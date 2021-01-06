@@ -1,0 +1,245 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=Edge,chrome=1">
+    <meta name="viewport"
+          content="width=device-width, initial-scale=1, maximum-scale=1, minimum-scale=1, user-scalable=no">
+    <title>通视分析</title>
+    <link href="../../Build/Cesium/Widgets/widgets.css" rel="stylesheet">
+    <link href="./css/pretty.css" rel="stylesheet">
+    <script type="text/javascript" src="./js/jquery.min.js"></script>
+    <script src="./js/config.js"></script>
+    <script type="text/javascript" src="../../Build/Cesium/Cesium.js"></script>
+</head>
+<body>
+<div id="cesiumContainer"></div>
+<div id='loadingbar' class="spinner">
+    <div class="spinner-container container1">
+        <div class="circle1"></div>
+        <div class="circle2"></div>
+        <div class="circle3"></div>
+        <div class="circle4"></div>
+    </div>
+    <div class="spinner-container container2">
+        <div class="circle1"></div>
+        <div class="circle2"></div>
+        <div class="circle3"></div>
+        <div class="circle4"></div>
+    </div>
+    <div class="spinner-container container3">
+        <div class="circle1"></div>
+        <div class="circle2"></div>
+        <div class="circle3"></div>
+        <div class="circle4"></div>
+    </div>
+</div>
+<div id='toolbar' class="param-container tool-bar">
+    <button type="button" id="addViewPoint" class="button black">添加观察点</button>
+    <button type="button" id="addTargetPoint" class="button black">添加目标点</button>
+    <button type="button" id="clear" class="button black">清除</button>
+</div>
+
+<script type="text/javascript">
+    function onload(Cesium) {
+        var viewer = new Cesium.Viewer('cesiumContainer');
+
+        if (!viewer.scene.pickPositionSupported) {
+            alert('不支持深度纹理,通视分析功能无法使用（无法添加观测点目标点）！');
+        }
+        $("#toolbar").show();
+        $('#loadingbar').remove();
+        var scene = viewer.scene;
+        scene.shadowMap.darkness = 1.275; //设置第二重烘焙纹理的效果（明暗程度）
+        scene.skyAtmosphere.brightnessShift = 0.4;  //修改大气的亮度
+        scene.debugShowFramesPerSecond = true;
+        scene.hdrEnabled = false;
+        scene.sun.show = false;
+        // 01设置环境光的强度-新处理CBD场景
+        scene.lightSource.ambientLightColor = new Cesium.Color(0.65, 0.65, 0.65, 1);
+        // 添加光源
+        var position1 = new Cesium.Cartesian3.fromDegrees(116.261209157595, 39.3042238956531, 480);
+        //光源方向点
+
+        var targetPosition1 = new Cesium.Cartesian3.fromDegrees(116.261209157595, 39.3042238956531, 430);
+        var dirLightOptions = {
+            targetPosition: targetPosition1,
+            color: new Cesium.Color(1.0, 1.0, 1.0, 1),
+            intensity: 0.55
+        };
+        directionalLight_1 = new Cesium.DirectionalLight(position1, dirLightOptions);
+        scene.addLightSource(directionalLight_1);
+        var sightline = new Cesium.Sightline(scene);
+
+        var widget = viewer.cesiumWidget;
+        try {
+
+            var promise = scene.open(URL_CONFIG.SCENE_CBD);
+            Cesium.when.all(promise, function (layer) {
+                scene.camera.setView({
+                    destination: new Cesium.Cartesian3.fromDegrees(116.44621857300415, 39.899281526734555, 216.7793905027196),
+                    orientation: {
+                        heading: 0.41348036210986194,
+                        pitch: -0.13636490404291735,
+                        roll: 6.283185307179563
+                    }
+                });
+                for (var i = 0; i < layer.length; i++) {
+                    layer[i].selectEnabled = false;
+                }
+
+                sightline.build();
+            }, function (e) {
+                if (widget._showRenderLoopErrors) {
+                    var title = '加载SCP失败，请检查网络连接状态或者url地址是否正确？';
+                    widget.showErrorPanel(title, undefined, e);
+                }
+            });
+        } catch (e) {
+            if (widget._showRenderLoopErrors) {
+                var title = '渲染时发生错误，已停止渲染。';
+                widget.showErrorPanel(title, undefined, e);
+            }
+        }
+
+
+        var addViewFlag = false;//当前点击状态是否是 添加观察点
+        var addTargetFlag = false;//当前点击状态是否是 添加目标点
+
+        var num = 0;//添加的目标点的点号
+        var couldRemove = false;//是否能移除目标点
+
+        var handlerPoint = new Cesium.DrawHandler(viewer, Cesium.DrawMode.Point);
+        handlerPoint.drawEvt.addEventListener(function (result) {
+            //添加观察点
+            if (addViewFlag) {
+                var point = result.object;
+                // point.show = false;
+                var position = result.object.position;
+
+                //将获取的点的位置转化成经纬度
+                var cartographic = Cartesian2toDegrees(position);
+
+                //设置观察点
+                sightline.viewPosition = cartographic;
+                addViewFlag = false;
+            }
+            handlerPoint.deactivate();
+        });
+
+
+        var handler = new Cesium.ScreenSpaceEventHandler(scene.canvas);
+
+
+        document.getElementById("addViewPoint").onclick = function () {
+            addViewFlag = true;
+            if (handlerPoint.active) {
+                return;
+            }
+            viewer.entities.removeAll();
+            if (couldRemove) {
+                sightline.removeAllTargetPoint();
+            }
+            handlerPoint.activate();
+
+            if (addViewFlag || addTargetFlag) {
+                viewer.enableCursorStyle = false;
+                viewer._element.style.cursor = '';
+                $('body').removeClass('drawCur').addClass('drawCur');
+            }
+        };
+
+
+        document.getElementById("addTargetPoint").onclick = function () {
+            addViewFlag = false;
+            addTargetFlag = true;
+
+            if (addViewFlag || addTargetFlag) {
+                viewer.enableCursorStyle = false;
+                viewer._element.style.cursor = '';
+                $('body').removeClass('drawCur').addClass('drawCur');
+            }
+
+            //鼠标点击事件，添加点
+            handler.setInputAction(function (e) {
+                var position = scene.pickPosition(e.position);
+                addTarget(position);
+            }, Cesium.ScreenSpaceEventType.LEFT_CLICK);
+
+            //鼠标移动事件，更新点
+            handler.setInputAction(function (evt) {
+
+                //鼠标移动，更新最后一次添加的目标点的位置
+                var position = scene.pickPosition(evt.endPosition);
+
+                if (num > 0) {
+                    sightline.removeTargetPoint("point0");
+
+                    var cartographic = Cartesian2toDegrees(position);
+
+                    var flag = sightline.addTargetPoint({
+                        position: cartographic,
+                        name: "point0"
+                    });
+                }
+            }, Cesium.ScreenSpaceEventType.MOUSE_MOVE);
+
+            //鼠标右键事件，结束
+            handler.setInputAction(function () {
+                viewer.enableCursorStyle = true;
+                $('body').removeClass('drawCur');
+
+                handler.removeInputAction(Cesium.ScreenSpaceEventType.MOUSE_MOVE);
+                handler.removeInputAction(Cesium.ScreenSpaceEventType.LEFT_CLICK);
+            }, Cesium.ScreenSpaceEventType.RIGHT_CLICK);
+        };
+
+        document.getElementById("clear").onclick = function () {
+            addViewFlag = false;
+            addTargetFlag = false;
+            handlerPoint.clear();
+            viewer.entities.removeAll();
+            if (couldRemove) {
+                sightline.removeAllTargetPoint();
+                couldRemove = false;
+            }
+            viewer.enableCursorStyle = true;
+            $('body').removeClass('drawCur');
+        }
+
+
+        //添加通视点
+        function addTarget(CartesianPosition) {
+            if (addViewFlag === false && addTargetFlag) {
+                num += 1;
+                //将获取的点的位置转化成经纬度
+                var cartographic = Cartesian2toDegrees(CartesianPosition);
+                //添加目标点
+                var name = "point" + num;
+                var flag = sightline.addTargetPoint({
+                    position: cartographic,
+                    name: name
+                });
+                couldRemove = true;
+            }
+        }
+
+        //笛卡尔转换为经纬度
+        function Cartesian2toDegrees(position) {
+            var cartographic = Cesium.Cartographic.fromCartesian(position);
+            var longitude = Cesium.Math.toDegrees(cartographic.longitude);
+            var latitude = Cesium.Math.toDegrees(cartographic.latitude);
+            var height = cartographic.height;
+
+            return [longitude, latitude, height];
+        }
+
+    }
+
+    if (typeof Cesium !== 'undefined') {
+        window.startupCalled = true;
+        onload(Cesium);
+    }
+</script>
+</body>
+</html>

@@ -1,0 +1,130 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:v-on="http://www.w3.org/1999/xhtml" xmlns:v-bind="http://www.w3.org/1999/xhtml">
+<head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=Edge,chrome=1">
+    <meta name="viewport"
+          content="width=device-width, initial-scale=1, maximum-scale=1, minimum-scale=1, user-scalable=no">
+    <title>线框模式</title>
+    <link href="../../Build/Cesium/Widgets/widgets.css" rel="stylesheet">
+    <link href="./css/pretty.css" rel="stylesheet">
+    <script src="./js/jquery.min.js"></script>
+    <script src="./js/bootstrap.min.js"></script>
+    <script src="./js/bootstrap-select.min.js"></script>
+    <script src="./js/bootstrap-treeview.js"></script>
+    <script src="../../Build/Cesium/Cesium.js"></script>
+    <script src="./js/spectrum.js"></script>
+    <script src="./js/config.js"></script>
+</head>
+<body>
+<div id="cesiumContainer"></div>
+<div id='toolbar' class="param-container tool-bar">
+    <div class="param-item">
+        <b>填充风格：</b>
+        <select id="fillStyle" class="cesium-button" style="width: 150px">
+            <option value="0">填充模式</option>
+            <option value="1">线框模式</option>
+            <option value="2" selected>填充和线框模式</option>
+        </select>
+    </div>
+
+    <div class="param-item">
+        <b>线框模式：</b>
+        <select id="WireFrameType" class="cesium-button" style="width: 150px">
+            <option value="0">三角面线框</option>
+            <option value="1">四边形线框</option>
+            <option value="2">草图模式</option>
+            <option value="3" selected>特效线框</option>
+        </select>
+    </div>
+
+    <div class="param-item">
+        <label>线框宽度：</label>
+        <input type="number" min="0.5" max="10" step="0.5" id="width" value="1.0" style="width: 50px">
+    </div>
+
+    <div class="param-item">
+        <label>线框颜色：</label>
+        <input type="text" id="color" class="colorPicker">
+    </div>
+</div>
+
+
+<script>
+    function onload(Cesium) {
+        var viewer = new Cesium.Viewer('cesiumContainer');
+        var scene = viewer.scene;
+        var promise = scene.open(URL_CONFIG.SCENE_CHONGQING_TX);
+        Cesium.when.all(promise, function (layers) {
+            //设置相机位置，定位至模型
+            scene.camera.setView({
+                destination: new Cesium.Cartesian3(-1582723.045963302, 5317134.832891206, 3147506.8171177055),
+                orientation: {
+                    heading: 3.376613944238855,
+                    pitch: -0.2719071645433542,
+                    roll: 6.283172414416338
+                }
+            });
+
+
+            var layer = scene.layers.find("CQmodel");
+            // layer.setLodRangeScale(0.01); // 精细加载
+
+
+            layer.style3D.fillStyle = Cesium.FillStyle.Fill_And_WireFrame;
+            layer.wireFrameMode = Cesium.WireFrameType.EffectOutline;
+
+
+            // 初始化颜色选择控件
+            var initialColor = "rgb(204,204,204)";
+            // if (/^#/.test(initialColor)) {
+            //     var color = Cesium.Color.fromCssColorString(initialColor);
+            //     var newColor = color.toCssColorString();
+            // }
+            layer.style3D.lineColor = Cesium.Color.fromCssColorString(initialColor);
+
+            setTimeout(function () {
+                $("#color").spectrum({
+                    color: initialColor,
+                    chooseText: "确定",
+                    cancelText: "取消",
+                    showPalette: true,
+                    showAlpha: true,
+                    localStorageKey: "spectrum.demo",
+                    palette: palette,
+                    change: function (color) {
+                        var colorObj = color.toRgb();
+                        layer.style3D.lineColor = new Cesium.Color(colorObj.r / 255, colorObj.g / 255, colorObj.b / 255, colorObj.a);
+                    }
+                });
+            }, 3000)
+
+
+            $('#fillStyle').change(function () {
+                var value = parseInt($(this).val());
+                layer.style3D.fillStyle = value;
+                // layer.refresh();
+            })
+
+            $('#WireFrameType').change(function () {
+                var value = parseInt($(this).val());
+                layer.wireFrameMode = value;
+                // layer.refresh();
+            })
+
+            $("#width").on("input change", function () {
+                var value = parseInt($("#width").val());
+                layer.style3D.lineWidth = value;
+            });
+
+
+        });
+    }
+
+    if (typeof Cesium !== 'undefined') {
+        window.startupCalled = true;
+        onload(Cesium);
+    }
+</script>
+</body>
+</html>

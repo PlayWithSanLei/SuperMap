@@ -1,0 +1,235 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=Edge,chrome=1">
+    <meta name="viewport"
+          content="width=device-width, initial-scale=1, maximum-scale=1, minimum-scale=1, user-scalable=no">
+    <title>填挖方分析</title>
+    <link href="../../Build/Cesium/Widgets/widgets.css" rel="stylesheet">
+    <link href="./css/bootstrap.min.css" rel="stylesheet">
+    <link href="./css/pretty.css" rel="stylesheet">
+    <script src="./js/jquery.min.js"></script>
+    <script src="./js/bootstrap.min.js"></script>
+    <script src="./js/bootstrap-select.min.js"></script>
+    <script src="./js/tooltip.js"></script>
+    <script src="./js/config.js"></script>
+    <script type="text/javascript" src="../../Build/Cesium/Cesium.js"></script>
+    <style>
+        .input {
+            width: 100px;
+        }
+
+        .drawCur {
+            cursor: url(./images/cur/draw.cur), auto;
+        }
+    </style>
+</head>
+<body>
+<div id="cesiumContainer"></div>
+<div id='loadingbar' class="spinner">
+    <div class="spinner-container container1">
+        <div class="circle1"></div>
+        <div class="circle2"></div>
+        <div class="circle3"></div>
+        <div class="circle4"></div>
+    </div>
+    <div class="spinner-container container2">
+        <div class="circle1"></div>
+        <div class="circle2"></div>
+        <div class="circle3"></div>
+        <div class="circle4"></div>
+    </div>
+    <div class="spinner-container container3">
+        <div class="circle1"></div>
+        <div class="circle2"></div>
+        <div class="circle3"></div>
+        <div class="circle4"></div>
+    </div>
+</div>
+<div id="toolbar" class="param-container tool-bar">
+    <div class="param-item">
+        <b>开挖高程：</b>
+        <input type="text" id="depth" value="5000" style="margin-left: 50px;">
+    </div>
+    <div class="param-item">
+        <b>开挖面积(平方米):</b>
+        <input type="text" id="cutarea" value="" style="margin-left: 10px;">
+    </div>
+    <div class="param-item">
+        <b>开挖体积(立方米):</b>
+        <input type="text" id="cutVolume" value="" style="margin-left: 10px;">
+    </div>
+    <div class="param-item">
+        <b>填方面积(平方米):</b>
+        <input type="text" id="fillarea" value="" style="margin-left: 10px;">
+    </div>
+    <div class="param-item">
+        <b>填方体积(立方米):</b>
+        <input type="text" id="fillVolume" value="" style="margin-left: 10px;">
+    </div>
+    <div class="param-item">
+        <b>未填挖面积(平方米):</b>
+        <input type="text" id="remainderArea" value="">
+    </div>
+
+    <div class="param-item" style="float: right;">
+        <button type="button" id="filladd" class="button black">绘制</button>
+        <button type="button" id="fillclear" class="button black">清除</button>
+    </div>
+
+
+</div>
+
+<script type="text/javascript">
+    function onload(Cesium) {
+        var viewer = new Cesium.Viewer('cesiumContainer', {});
+
+        var clampMode = 0; // 空间模式
+        var scene = viewer.scene;
+        var widget = viewer.cesiumWidget;
+
+        var tooltip = createTooltip(document.body);
+
+        var promise = scene.open('http://www.supermapol.com/realspace/services/3D-dxyx_ios2/rest/realspace')
+        Cesium.when.all(promise, function (layers) {
+            //设置相机位置、视角
+            viewer.scene.camera.setView({
+                destination: new Cesium.Cartesian3(-1206939.1925299785, 5337998.241228442, 3286279.2424502545),
+                orientation: {
+                    heading: 1.4059101895600987,
+                    pitch: -0.20917672793046682,
+                    roll: 2.708944180085382e-13
+                }
+            });
+
+            var handlerPolygon = new Cesium.DrawHandler(viewer, Cesium.DrawMode.Polygon, clampMode);
+
+            handlerPolygon.activeEvt.addEventListener(function (isActive) {
+                if (isActive == true) {
+                    viewer.enableCursorStyle = false;
+                    viewer._element.style.cursor = '';
+                    $('body').removeClass('drawCur').addClass('drawCur');
+                } else {
+                    viewer.enableCursorStyle = true;
+                    $('body').removeClass('drawCur');
+                }
+            });
+
+            handlerPolygon.movingEvt.addEventListener(function (windowPosition) {
+                if (handlerPolygon.isDrawing) {
+                    tooltip.showAt(windowPosition, '<p>点击确定多边形中间点</p><p>右键单击结束绘制</p>');
+                } else {
+                    tooltip.showAt(windowPosition, '<p>点击绘制第一个点</p>');
+                }
+            });
+
+            handlerPolygon.drawEvt.addEventListener(function (result) {
+                handlerPolygon.polygon.show = false;
+                // handlerPolygon.polyline.show = false;
+                handlerPolygon.deactivate();
+                tooltip.setVisible(false);
+
+                var dep = document.getElementById("depth").value;
+
+                var array = [].concat(result.object.positions);
+                var positions = [];
+                var positionsii = [];
+                for (var i = 0, len = array.length; i < len; i++) {
+                    var cartographic = Cesium.Cartographic.fromCartesian(array[i]);
+                    var longitude = Cesium.Math.toDegrees(cartographic.longitude);
+                    var latitude = Cesium.Math.toDegrees(cartographic.latitude);
+                    var h = cartographic.height;
+                    if (positions.indexOf(longitude) == -1 && positions.indexOf(latitude) == -1) {
+
+                        positions.push(longitude);
+                        positions.push(latitude);
+                        positions.push(parseInt(dep));
+
+                        positionsii.push({
+                            x: longitude,
+                            y: latitude
+                        });
+                    }
+                }
+
+                //此处用的地形修改 而不是地形开挖
+                viewer.scene.globe.removeAllModifyRegion();
+                viewer.scene.globe.addModifyRegion({
+                    name: 'ggg',
+                    position: positions
+                });
+
+                var length = [];
+                length.push(positionsii.length);
+
+                //需要在此 动态构造一个 REGION类型的对象
+                var geometry = {
+                    "id": 23,
+                    "parts": length,
+                    "points": positionsii,
+                    "style": null,
+                    "type": "REGION"
+                };
+
+
+                var queryObj = {
+                    "cutFillType": "REGIONANDALTITUDE",
+                    "baseAltitude": dep,
+                    "region": geometry,
+                    "resultDataset": "result",
+                    "buildPyramid": true,
+                    "deleteExistResultDataset": true
+                };
+                var queryObjJSON = JSON.stringify(queryObj);
+                $.ajax({
+                    type: 'post',
+                    url: "http://www.supermapol.com/realspace/services/spatialAnalysis-dxyx_ios/restjsr/spatialanalyst/datasets/DEM@%E5%9B%9B%E5%A7%91%E5%A8%98%E5%B1%B1/terraincalculation/cutfill.json?returnContent=true",
+                    data: queryObjJSON,
+                    success: function (data) {
+                        console.log(data);
+                        // var resultObj = JSON.parse(data);
+                        var resultObj = data;
+
+                        document.getElementById("cutarea").value = resultObj.cutArea;
+                        document.getElementById("cutVolume").value = resultObj.cutVolume;
+                        document.getElementById("fillarea").value = resultObj.fillArea;
+                        document.getElementById("fillVolume").value = resultObj.fillVolume;
+                        document.getElementById("remainderArea").value = resultObj.remainderArea;
+                    }
+                });
+
+            });
+
+            document.getElementById("filladd").onclick = function () {
+                handlerPolygon.activate();
+            };
+
+            document.getElementById("fillclear").onclick = function () {
+                viewer.scene.globe.removeAllModifyRegion();
+                document.getElementById("cutarea").value = "";
+                document.getElementById("cutVolume").value = "";
+                document.getElementById("fillarea").value = "";
+                document.getElementById("fillVolume").value = "";
+                document.getElementById("remainderArea").value = "";
+                handlerPolygon.clear();
+            };
+
+            $('#toolbar').show();
+            $('#loadingbar').remove();
+
+
+            if (!scene.pickPositionSupported) {
+                alert('不支持深度拾取,无法进行鼠标交互绘制！');
+            }
+        })
+
+    }
+
+    if (typeof Cesium !== 'undefined') {
+        window.startupCalled = true;
+        onload(Cesium);
+    }
+</script>
+</body>
+</html>

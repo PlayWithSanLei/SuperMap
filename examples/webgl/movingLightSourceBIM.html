@@ -1,0 +1,142 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=Edge,chrome=1">
+    <meta name="viewport"
+          content="width=device-width, initial-scale=1, maximum-scale=1, minimum-scale=1, user-scalable=no">
+    <title>BIM模型光照优化</title>
+    <link href="../../Build/Cesium/Widgets/widgets.css" rel="stylesheet">
+    <link href="./css/pretty.css" rel="stylesheet">
+    <script src="./js/jquery.min.js"></script>
+    <script src="./js/config.js"></script>
+    <script src="./js/slider.js"></script>
+    <script type="text/javascript" src="../../Build/Cesium/Cesium.js"></script>
+    <style>
+        html, body, #cesiumContainer {
+            width: 100%;
+            height: 100%;
+            margin: 0;
+            padding: 0;
+            overflow: hidden;
+            background-color: #000000;
+        }
+    </style>
+</head>
+<body>
+<div id="cesiumContainer"></div>
+<div id='toolbar' class="param-container tool-bar">
+    <div style="width: 240px">
+        <button class="button black" id="defaultLight">默认光照</button>
+        <button class="button black" id="lightWithCamera">光照跟随相机</button>
+        <div>
+            <label>水平夹角(度):</label><br>
+            <span>-180</span>
+            <input type="range" style="width: 70%" id="horizonalFov" min="-180" max="180" step="1" value="0"
+                   title="水平夹角"
+                   data-bind="value: horizontalFov, valueUpdate: 'input'">
+            <span>180</span>
+        </div>
+        <br>
+        <div>
+            <label>垂直夹角(度):</label><br>
+            <span>&nbsp;-90&nbsp;</span>
+            <input type="range" style="width: 70%" id="verticalFov" min="-90" max="90" step="1.0" value="0" title="垂直夹角"
+                   data-bind="value: verticalFov, valueUpdate: 'input'">
+            <span>90</span>
+        </div>
+
+    </div>
+</div>
+<blockquote id="bubble" class="bubble">
+    <img id="myimg" src="./images/home_banner.jpg" width="50%" height="auto">
+    <h2 id="title"></h2>
+    <p id="des" class="word"></p>
+    <audio controls="controls">
+        Your browser does not support the audio tag.
+    </audio>
+</blockquote>
+<script type="text/javascript">
+    function onload(Cesium) {
+        var infoboxContainer = document.getElementById("bubble");
+        var viewer = new Cesium.Viewer('cesiumContainer', {
+            //反走样
+            contextOptions: {
+                msaaLevel: 8,  //硬件反走样，1-8，默认值为1
+                requestWebgl2: true
+            },
+        });
+        viewer.imageryLayers.addImageryProvider(new Cesium.BingMapsImageryProvider({
+            url: 'https://dev.virtualearth.net',
+            mapStyle: Cesium.BingMapsStyle.AERIAL,
+            key: URL_CONFIG.BING_MAP_KEY
+        }));
+
+        var scene = viewer.scene;
+
+        var promise = scene.open(URL_CONFIG.SCENE_MOVINGLIGHT);
+
+        Cesium.when(promise, function (layers) {
+            //设置边框线
+            for (var layer of layers) {
+                layer.style3D.lineWidth = 0.5;
+                layer.style3D.lineColor = new Cesium.Color(60 / 255, 60 / 255, 60 / 255, 1);
+                layer.style3D.fillStyle = Cesium.FillStyle.Fill_And_WireFrame;
+                layer.wireFrameMode = Cesium.WireFrameType.EffectOutline;
+            }
+//            scene.sun.show = true;
+        });
+        var degZ = 20;//水平夹角
+        $("#horizonalFov").on("input change", function () {
+            degZ = parseFloat(this.value)
+        });
+        var degX = -10; //垂直夹角
+        $("#verticalFov").on("input change", function () {
+            degX = parseFloat(this.value)
+        });
+        var directionalLight_1, removalFunc;
+        $('#lightWithCamera').on('click', function () {
+            scene.sun.show = false;
+            // 设置环境光的强度
+            scene.lightSource.ambientLightColor = new Cesium.Color(0.3, 0.3, 0.3, 1);
+
+            var position1 = new Cesium.Cartesian3.fromDegrees(116.148411753949 - 0.000009405717451407729 * 86.6, 40.2317259501307 - 0.00000914352698135 * 50, 350);
+            var targetPosition1 = new Cesium.Cartesian3.fromDegrees(116.148411753949, 40.2317259501307, 130);
+            var dirLightOptions = {
+                targetPosition: targetPosition1,
+                color: new Cesium.Color(1.0, 1.0, 1.0, 1),
+                intensity: 0.7
+            };
+            directionalLight_1  = new Cesium.DirectionalLight(position1, dirLightOptions);
+            scene.addLightSource(directionalLight_1);
+            removalFunc = scene.postRender.addEventListener(function () { // 每一帧都去计算气泡的正确位置
+                var cameraPosition = Cesium.Cartesian3.clone(scene.camera.position);
+                var length = 100;
+                var quad1 = Cesium.Quaternion.fromAxisAngle(viewer.scene.camera.upWC, Cesium.Math.toRadians(degZ));
+                var quad2 = Cesium.Quaternion.fromAxisAngle(viewer.scene.camera.rightWC, Cesium.Math.toRadians(degX));
+                var resQuad = Cesium.Quaternion.add(quad2, quad1, quad1);
+                var rotation = Cesium.Matrix3.fromQuaternion(resQuad);
+                var direction = Cesium.Matrix3.multiplyByVector(rotation, viewer.scene.camera.directionWC, new Cesium.Cartesian3());
+                var targetPosition2 = Cesium.Cartesian3.add(
+                    viewer.scene.camera.positionWC,
+                    Cesium.Cartesian3.multiplyByScalar(direction, length, new Cesium.Cartesian3()),
+                    new Cesium.Cartesian3()
+                );
+                directionalLight_1.position = cameraPosition;
+                directionalLight_1.targetPosition = targetPosition2;
+            });
+        });
+        $('#defaultLight').on('click', function () {
+            scene.removeLightSource(directionalLight_1);
+            removalFunc();
+            scene.sun.show = true;
+            scene.lightSource.ambientLightColor = new Cesium.Color(0.76, 0.76, 0.76, 1);
+        });
+    }
+    if (typeof Cesium !== 'undefined') {
+        window.startupCalled = true;
+        onload(Cesium);
+    }
+</script>
+</body>
+</html>

@@ -1,0 +1,294 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=Edge,chrome=1">
+    <meta name="viewport"
+          content="width=device-width, initial-scale=1, maximum-scale=1, minimum-scale=1, user-scalable=no">
+    <title>字段专题图</title>
+    <link href="../../Build/Cesium/Widgets/widgets.css" rel="stylesheet">
+    <link href="./css/pretty.css" rel="stylesheet">
+    <script src="./js/jquery.min.js"></script>
+    <script src="./js/bootstrap.min.js"></script>
+    <script src="./js/bootstrap-select.min.js"></script>
+    <script src="./js/bootstrap-treeview.js"></script>
+    <script src="../../Build/Cesium/Cesium.js"></script>
+    <script src="./js/spectrum.js"></script>
+    <script src="./js/config.js"></script>
+
+    <style>
+        .sp-preview {
+            width: 170px;
+        }
+    </style>
+
+</head>
+
+<body>
+<div id="cesiumContainer"></div>
+<div id='toolbar' class="param-container tool-bar">
+    <div>
+        <label style="color:#FFFFFF; font-size: 16px">选择专题字段：</label>
+        <select name="select_layer" id="select_layer" style="height:25px; width: 140px">
+            <option id="floors" value="floors">建筑层数</option>
+            <option id="landuse" value="landuse">建筑用途</option>
+        </select>
+        <br>
+        <br>
+        <div id="floorsL" style="padding: 2px;margin: auto; width: 99%">
+            <label style="color: #FFFFFF;" for="color19">1 - 9层:&nbsp;&nbsp;&nbsp;&nbsp;</label>
+            <input class="colorPicker" size="15" data-bind="value: material,valueUpdate: 'input'" id="color19"><br><br>
+            <label style="color: #FFFFFF;" for="120">10-20层:&nbsp;&nbsp;</label>
+            <input class="colorPicker" size="8" data-bind="value: material,valueUpdate: 'input'" id="120"><br><br>
+            <label style="color: #FFFFFF;" for="over20">20 层以上: </label>
+            <input class="colorPicker" size="8" data-bind="value: material,valueUpdate: 'input'" id="over20"><br><br>
+            <br>
+            <br>
+            <div style="width: 90%;margin-left:40px;">
+                <input type="button" id="floorNum" value="确定" class="button black">
+                <input type="button" id="clear1" value="清除" class="button black">
+            </div>
+        </div>
+        <div id="landUseL" style="padding: 2px;display: none; margin: auto; width: 99%">
+            <label style="color: #FFFFFF;" for="living">住&nbsp;&nbsp;&nbsp;&nbsp;宅：</label>
+            <input class="colorPicker" size="8" data-bind="value: material,valueUpdate: 'input'" id="living"><br><br>
+            <label style="color: #FFFFFF;" for="shop">商业用地:</label>
+            <input class="colorPicker" size="8" data-bind="value: material,valueUpdate: 'input'" id="shop"><br><br>
+            <br>
+            <br>
+            <div style="width: 90%;margin-left:40px;">
+                <input type="button" id="landUseSub" value="确定" style="margin-left: 10px" class="button black">
+                <input type="button" id="clear2" value="清除" class="button black">
+            </div>
+        </div>
+    </div>
+    <div>
+        <label>图层透明度：</label>
+        <input style="width: 60%" type="range" id="layerAlpha" min="0" max="1.0" step="0.01" value="1.0">
+    </div>
+
+
+</div>
+
+<script type="text/javascript">
+    function onload(Cesium) {
+        //初始化viewer部件
+        var viewer = new Cesium.Viewer('cesiumContainer');
+        window.scene = viewer.scene;
+        $('#loadingbar').remove();
+        // viewer.imageryLayers.addImageryProvider(new Cesium.BingMapsImageryProvider({
+        //     url: 'https://dev.virtualearth.net',
+        //     mapStyle: Cesium.BingMapsStyle.AERIAL,
+        //     key: URL_CONFIG.BING_MAP_KEY
+        // }));
+
+        var infos = [
+            {
+                url: 'http://192.168.17.103:8090/iserver/services/3D-JuMinDi/rest/realspace/datas/%E5%B1%85%E6%B0%91%E5%9C%B0%E9%9D%A2a/config',
+                cullEnabled: true,
+                queryFieldNames: ['Floors', 'LandUse']
+            }
+        ];
+        var promises = [];
+        for (let i = 0; i < infos.length; i++) {
+            let promise = scene.addS3MTilesLayerByScp(
+                infos[i].url, {
+                    name: 'S3MB' + i
+                });
+            promises.push(promise);
+
+        }
+
+        var _layers = [];
+        var layer;
+
+        var colorConditions1 = [];
+        var colorConditions2 = [];
+        var color1 = 'rgb(204,204,0)';
+        var color2 = 'rgb(102,204,255)';
+        var color3 = 'rgb(255,102,0)';
+        var color4 = 'rgb(255,153,153)';
+        var color5 = 'rgb(102,255,102)';
+
+
+        Cesium.when.all(promises, function (layers) {
+            for (var i = 0; i < infos.length; i++) {
+                layer = scene.layers.find('S3MB' + i);
+                viewer.flyTo(layer);
+            }
+
+            for (var j = 0; j < layers.length; j++) {
+                _layers = layers;
+                layers[j].indexedDBSetting.isGeoTilesRootNodeSave = true;//本地缓存根节点，根节点不需要重复下载 （不清浏览器缓存）
+                layers[j].residentRootTile = true;//根节点驻留内存（屏幕区域外不清除根节点内存）
+
+                _layers[j].style3D.fillStyle = Cesium.FillStyle.Fill_And_WireFrame;
+                _layers[j].style3D.lineWidth = 1.0;
+                _layers[j].style3D.lineColor = new Cesium.Color(0, 0, 0, 1);
+                _layers[j].wireFrameMode = Cesium.WireFrameType.EffectOutline;  //草图模式，即线框
+            }
+
+            scene.camera.setView({
+                //将经度、纬度、高度的坐标转换为笛卡尔坐标
+                destination: new Cesium.Cartesian3(-2183949.103524375, 4395793.617279387, 4077622.1053076447),
+                orientation: {
+                    heading: 8.29736279683857e-12,
+                    pitch: -0.4012735072031328,
+                    roll: 8.539835505416704e-12
+                }
+            });
+
+            $("#color19").spectrum({
+                color: "rgb(204,204,0)",
+                chooseText: "确定",
+                cancelText: "取消",
+                showPalette: true,
+                showAlpha: true,
+                change: function (color) {
+                    var colorObj = color.toRgb();
+                    color1 = "rgb(" + String(colorObj.r) + ", " + String(colorObj.g) + ", " + String(colorObj.b) + ")";
+                }
+            });
+
+            $("#120").spectrum({
+                color: "rgb(102,204,255)",
+                chooseText: "确定",
+                cancelText: "取消",
+                showPalette: true,
+                showAlpha: true,
+                change: function (color) {
+                    var colorObj = color.toRgb();
+                    color2 = "rgb(" + String(colorObj.r) + ", " + String(colorObj.g) + ", " + String(colorObj.b) + ")";
+
+                }
+            });
+
+            $("#over20").spectrum({
+                color: "rgb(255,102,0)",
+                chooseText: "确定",
+                cancelText: "取消",
+                showPalette: true,
+                showAlpha: true,
+                change: function (color) {
+                    var colorObj = color.toRgb();
+                    color3 = "rgb(" + String(colorObj.r) + ", " + String(colorObj.g) + ", " + String(colorObj.b) + ")";
+                }
+            });
+
+            $("#living").spectrum({
+                color: "rgb(255,153,153)",
+                chooseText: "确定",
+                cancelText: "取消",
+                showPalette: true,
+                showAlpha: true,
+                change: function (color) {
+                    var colorObj = color.toRgb();
+                    color4 = "rgb(" + String(colorObj.r) + ", " + String(colorObj.g) + ", " + String(colorObj.b) + ")";
+                }
+            });
+
+            $("#shop").spectrum({
+                color: "rgb(102,255,102)",
+                chooseText: "确定",
+                cancelText: "取消",
+                showPalette: true,
+                showAlpha: true,
+                change: function (color) {
+                    var colorObj = color.toRgb();
+                    color5 = "rgb(" + String(colorObj.r) + ", " + String(colorObj.g) + ", " + String(colorObj.b) + ")";
+                }
+            });
+        })
+
+        $(function () {
+            $('#select_layer').change(function () {
+                $('#landUseL').hide();
+                if ($(this).val() === 'floors') {
+                    $('#floorsL').show();
+                    $('#landUseL').hide();
+                } else {
+                    $('#landUseL').show();
+                    $('#floorsL').hide();
+                }
+            })
+        });
+
+        //设置专题图1
+        $('#floorNum').on("click", function () {
+            colorConditions1.length = 0;
+
+            for (var j = 0; j < _layers.length; j++) {
+                // _layers[j].queryFieldNames = ['Floors', 'LandUse'];//接口调整到图层上，不需要开启indexedDBSetting.isAttributesSave=true
+                colorConditions1.push(['${Floors} < 10', color1]);
+                colorConditions1.push(['${Floors} >= 10 && ${Floors}<20', color2]);
+                colorConditions1.push(['${Floors} >= 20', color3]);
+                colorConditions1.push(['true', 'rgb(255,255,255)']);
+                _layers[j].themeStyle = setCesium3DTileStyle(colorConditions1);
+
+//        		设置线框
+                _layers[j].style3D.fillStyle = Cesium.FillStyle.Fill_And_WireFrame;
+                _layers[j].style3D.lineWidth = 1.0;
+                _layers[j].style3D.lineColor = new Cesium.Color(1, 1, 1, 1);
+                _layers[j].wireFrameMode = Cesium.WireFrameType.EffectOutline;  //草图模式，即线框
+            }
+        });
+
+        //设置专题图2
+        $('#landUseSub').on("click", function () {
+            colorConditions2.length = 0;
+            for (var j = 0; j < _layers.length; j++) {
+                // _layers[j].queryFieldNames = ['Floors', 'LandUse'];
+                colorConditions2.push(['${LandUse} === "住宅"', color4]);
+                colorConditions2.push(['${LandUse} === "商业用地"', color5]);
+                colorConditions2.push(['true', 'rgb(255,255,255)']);
+                _layers[j].themeStyle = setCesium3DTileStyle(colorConditions2);
+
+                _layers[j].style3D.fillStyle = Cesium.FillStyle.Fill_And_WireFrame;
+                _layers[j].style3D.lineWidth = 1.0;
+                _layers[j].style3D.lineColor = new Cesium.Color(1, 1, 1, 1);
+                _layers[j].wireFrameMode = Cesium.WireFrameType.EffectOutline;  //草图模式，即线框
+            }
+        });
+
+        $('#clear1').on('click', function () {
+            colorConditions1.length = 0;
+            for (var j = 0; j < _layers.length; j++) {
+                // colorConditions1.push(['${Floors}', 'rgb(255,255,255)']);
+                colorConditions1.push(['true', 'rgb(255,255,255)']);
+                _layers[j].themeStyle = setCesium3DTileStyle(colorConditions1);
+                _layers[j].style3D.fillStyle = Cesium.FillStyle.Fill_And_WireFrame;
+            }
+        });
+
+        $('#clear2').on('click', function () {
+            colorConditions2.length = 0;
+            for (j = 0; j < _layers.length; j++) {
+                // colorConditions2.push(['${LandUse}', 'rgb(255,255,255)']);
+                colorConditions2.push(['true', 'rgb(255,255,255)']);
+                _layers[j].themeStyle = setCesium3DTileStyle(colorConditions2);
+                _layers[j].style3D.fillStyle = Cesium.FillStyle.Fill_And_WireFrame;
+            }
+        })
+
+        //设置透明度
+        $("#layerAlpha").on("input change", function () {
+            layer.style3D.fillForeColor.alpha = parseFloat(this.value)
+        });
+
+        function setCesium3DTileStyle(colorConditions) {
+            var cesiumStyle = new Cesium.Cesium3DTileStyle({
+                color: {
+                    conditions: colorConditions
+                }
+            });
+            return cesiumStyle;
+        }
+    }
+
+    if (typeof Cesium !== 'undefined') {
+        window.startupCalled = true;
+        onload(Cesium);
+    }
+</script>
+</body>
+</html>

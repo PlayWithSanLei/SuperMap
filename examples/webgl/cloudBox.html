@@ -1,0 +1,205 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=Edge,chrome=1">
+    <meta name="viewport"
+          content="width=device-width, initial-scale=1, maximum-scale=1, minimum-scale=1, user-scalable=no">
+    <title>云层天空盒</title>
+    <link href="../../Build/Cesium/Widgets/widgets.css" rel="stylesheet">
+    <link href="./css/bootstrap.min.css" rel="stylesheet">
+    <link href="./css/pretty.css" rel="stylesheet">
+    <script src="./js/jquery.min.js"></script>
+    <script src="./js/bootstrap.min.js"></script>
+    <script src="./js/bootstrap-select.min.js"></script>
+    <script src="./js/config.js"></script>
+    <script type="text/javascript" src="../../Build/Cesium/Cesium.js"></script>
+</head>
+<body>
+<div id="cesiumContainer"></div>
+<div id="loadingbar" class="spinner">
+    <div class="spinner-container container1">
+        <div class="circle1"></div>
+        <div class="circle2"></div>
+        <div class="circle3"></div>
+        <div class="circle4"></div>
+    </div>
+    <div class="spinner-container container2">
+        <div class="circle1"></div>
+        <div class="circle2"></div>
+        <div class="circle3"></div>
+        <div class="circle4"></div>
+    </div>
+    <div class="spinner-container container3">
+        <div class="circle1"></div>
+        <div class="circle2"></div>
+        <div class="circle3"></div>
+        <div class="circle4"></div>
+    </div>
+</div>
+<div id="toolbar" class="param-container tool-bar">
+    <div id="cloudbox" style="display: block;">
+        <button type="button" id="open-cloud" class="button black">打开</button>
+        <button type="button" id="toggle-cloud" class="button black">切换</button>
+        <button type="button" id="close-cloud" class="button black">关闭</button>
+    </div>
+    <div id="skybox" style="display: none;">
+        <button type="button" id="open-sky" class="button black">打开</button>
+        <button type="button" id="toggle-sky" class="button black">切换</button>
+        <button type="button" id="close-sky" class="button black">关闭</button>
+    </div>
+    <div style="width:120px;">
+        <select id="selOpt" class="selectpicker show-tick form-control">
+            <option selected value="cloudbox">云层</option>
+            <option value="skybox">天空盒</option>
+        </select>
+    </div>
+</div>
+<script>
+    function onload(Cesium){
+        var viewer = new Cesium.Viewer("cesiumContainer");
+        var scene = viewer.scene;
+        var widget = viewer.cesiumWidget;
+
+        viewer.imageryLayers.addImageryProvider(new Cesium.BingMapsImageryProvider({
+            url: 'https://dev.virtualearth.net',
+            mapStyle: Cesium.BingMapsStyle.AERIAL,
+            key: URL_CONFIG.BING_MAP_KEY
+        }));
+
+        //创建云层
+        var cloudBox = new Cesium.CloudBox({
+            url:"./images/clouds-supermap-sm.png"
+        });
+
+        //创建天空盒
+        var sunSkyBox = new Cesium.SkyBox({
+           sources:{
+             positiveX:'./images/SkyBox/sunsetglow/Right.jpg',
+             negativeX:'./images/SkyBox/sunsetglow/Left.jpg',
+             positiveY:'./images/SkyBox/sunsetglow/Front.jpg',
+             negativeY:'./images/SkyBox/sunsetglow/Back.jpg',
+             positiveZ:'./images/SkyBox/sunsetglow/Up.jpg',
+             negativeZ:'./images/SkyBox/sunsetglow/Down.jpg'
+           }
+        });
+        var blueSkyBox = new Cesium.SkyBox({
+            sources:{
+              positiveX:'./images/SkyBox/bluesky/Right.jpg',
+              negativeX:'./images/SkyBox/bluesky/Left.jpg',
+              positiveY:'./images/SkyBox/bluesky/Front.jpg',
+              negativeY:'./images/SkyBox/bluesky/Back.jpg',
+              positiveZ:'./images/SkyBox/bluesky/Up.jpg',
+              negativeZ:'./images/SkyBox/bluesky/Down.jpg'
+            }
+        });
+        sunSkyBox.show = false;
+        blueSkyBox.show = false;
+
+        $('#loadingbar').remove();
+
+        handlerCloud();
+        $("#selOpt").change(function(){
+           var selOpt = $("#selOpt").val();
+           if(selOpt ==="cloudbox"){
+               $("#cloudbox").css("display","block");
+               $("#skybox").css("display","none");
+               sunSkyBox.show = false;
+               blueSkyBox.show = false;
+               handlerCamera(selOpt);
+               handlerCloud();
+           }else{
+              $("#cloudbox").css("display","none");
+              $("#skybox").css("display","block");
+              scene.cloudBox = null;
+              var promise = scene.open(URL_CONFIG.SCENE_CBD);
+              try{
+                  Cesium.when(promise,function(){
+                      var layer = scene.layers.find("Config");
+                      handlerCamera(selOpt);
+                  },function(e){
+                      if (widget._showRenderLoopErrors) {
+                          var title = '渲染时发生错误，已停止渲染。';
+                          widget.showErrorPanel(title, undefined, e);
+                      }
+                  });
+              }catch(e){
+                  if (widget._showRenderLoopErrors) {
+                      var title = '渲染时发生错误，已停止渲染。';
+                      widget.showErrorPanel(title, undefined, e);
+                  }
+              }
+              handlerSky();
+           }
+        });
+        function handlerCloud(){
+          var toggleCloud = false;
+          $("#open-cloud").click(function(){
+              scene.cloudBox = cloudBox;
+          });
+
+          $("#toggle-cloud").click(function(){
+             if(toggleCloud){
+                scene.cloudBox.url = "./images/clouds-supermap-sm.png";
+             }else{
+                scene.cloudBox.url = "./images/clouds.png";
+             }
+                toggleCloud = !toggleCloud;
+           });
+
+          $("#close-cloud").click(function(){
+              scene.cloudBox = null;
+          });
+        };
+        function handlerSky(){
+          var toggleSky = false;
+          $("#open-sky").click(function(){
+              sunSkyBox.WSpeed = 1.0;
+              sunSkyBox.show = true;
+              scene.skyBox = sunSkyBox;
+              scene.skyAtmosphere.show = false;
+          });
+          $("#toggle-sky").click(function(){
+              if(toggleSky){
+                  sunSkyBox.WSpeed = 1.0;
+                  sunSkyBox.show = true;
+                  scene.skyBox = sunSkyBox;
+                  blueSkyBox.show = false;
+              }else{
+                  blueSkyBox.WSpeed = 1.0;
+                  blueSkyBox.show = true;
+                  scene.skyBox = blueSkyBox;
+                  sunSkyBox.show = false;
+              }
+              toggleSky = !toggleSky;
+          });
+          $("#close-sky").click(function(){
+              sunSkyBox.show = false;
+              blueSkyBox.show = false;
+              scene.skyAtmosphere.show = true;
+          });
+        };
+        function handlerCamera(selOpt){
+            if(selOpt === "cloudbox"){
+               scene.camera.setView({
+                   destination:new Cesium.Cartesian3(-5701705.704276292,21279055.37816442,12718852.74864528)
+               });
+            }else{
+                scene.camera.setView({
+                    destination:new Cesium.Cartesian3(-2653915.6463913363,3571045.726807149,4570293.566342328),
+                    orientation:{
+                        heading:2.1953426301495345,
+                        pitch:-0.33632707158103625,
+                        roll:6.283185307179586
+                    }
+            });
+            }
+        }
+    }
+    if(typeof Cesium !== "undefined"){
+        window.startupCalled = true;
+        onload(Cesium);
+    }
+</script>
+</body>
+</html>
