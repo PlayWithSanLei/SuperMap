@@ -20,7 +20,7 @@
 		    border-radius: 5px;
 		    background-image: linear-gradient(to right, rgb(255,255,255) 16%, rgb(255,170,133) 16%,
 														rgb(255,170,133) 32%,rgb(255,123,105) 32%,
-		                                                rgb(255,123,105) 48%, rgb(204,41,41) 48%, 
+		                                                rgb(255,123,105) 48%, rgb(204,41,41) 48%,
 														rgb(204,41,41) 65%, rgb(104,13,13) 65%,
 		                                                rgb(104,13,13) 82%, rgb(102,2,8) 82%);
 		}
@@ -45,26 +45,43 @@
      * 示范代码：
    */
     function onload(Cesium) {
-        
-        try{
-		var diseaseArray={};//以Key-Value形式存储返回所需要的结果,其中Key为国家名称，Value为确诊人数
-		$.ajax({
-					type: "get",
+
+    try{
+		    var diseaseArray={};//以Key-Value形式存储返回所需要的结果,其中Key为国家名称，Value为确诊人数
+		    $.ajax({
+					type: "GET",
 					url: "https://view.inews.qq.com/g2/getOnsInfo?name=disease_h5",
-					dataType:"json",
+					dataType:"jsonp",
 					success: function (result) {
 						var resultObj = JSON.parse(result.data);//返回结果转成易解析的key-value形式
 						var diseaseData=resultObj.areaTree;
-						for(var i=0;i<diseaseData.length;i++)
-						{
+            console.log(diseaseData);
+            for (var i in diseaseData){
 							var name=diseaseData[i].name;
 							var confirm=diseaseData[i].total.confirm;
 							diseaseArray[name]=confirm;
-						}//获取各国确诊人数,并以key-value形式添加到diseaseArray
-						
-					
-						
-
+              console.log(name,confirm);
+            }
+					},
+					error: function (msg) {
+						console.log(msg);
+					}
+			})
+		    $.ajax({
+					type: "GET",
+					//url: "https://view.inews.qq.com/g2/getOnsInfo?name=disease_h5",
+					url: "https://view.inews.qq.com/g2/getOnsInfo?name=disease_foreign",
+					dataType:"jsonp",
+					success: function (result) {
+						var resultObj = JSON.parse(result.data);//返回结果转成易解析的key-value形式
+						var diseaseData=resultObj.foreignList;
+            console.log(diseaseData);
+            for (var i in diseaseData){
+							var name=diseaseData[i].name;
+							var confirm=diseaseData[i].confirm;
+							diseaseArray[name]=confirm;
+              console.log(name,confirm);
+            }
 					},
 					error: function (msg) {
 						console.log(msg);
@@ -77,9 +94,9 @@
 		 scene.globe.show=false;//隐藏三维球体
 		 scene.sun.show=false;//隐藏太阳
 		 scene.skyBox.show=false;//隐藏天空盒
-		 Cesium.loadJson('world_data.json').then(function(jsonData) {
-			 
-		     var polygonfeatures=jsonData.features;
+		 Cesium.loadJson('./data/world_data.json').then(function(jsonData) {
+
+		   var polygonfeatures=jsonData.features;
 			 for(var i=0;i<polygonfeatures.length;i++)
 			 {
 				 var polygonfeature=polygonfeatures[i].geometry.coordinates;//各国的面要素
@@ -92,29 +109,32 @@
 						var points=[];
 						var name=polygonfeatures[i].properties.COUNTRY;
 						var color=null;
+            //console.log(name,diseaseArray.hasOwnProperty(name));
 						if(diseaseArray.hasOwnProperty(name)){//判断该国是否有确诊病例
 							var confirm=diseaseArray[name];//获取确诊人数
+              //console.log(confirm);
 							name=name+"确诊人数是："+confirm;//name中信息将会直接展示到infobox中
-							if(Number(confirm)>10000)//按确诊人数不同,面的颜色也不同
+							console.log(name);
+                            if(Number(confirm)>10000)//按确诊人数不同,面的颜色也不同
 							{
 								color=new Cesium.Color(102/255, 2/255,8/255, 1);
 							}
 							else if(Number(confirm)>500 && Number(confirm)<=10000)
 							{
 								color=new Cesium.Color(140/255, 13/255,13/255, 1);
-								
+
 							}
 							else if(Number(confirm) <=500 && Number(confirm)>100)
 							{
 								color=new Cesium.Color(204/255, 41/255,41/255, 1);
-								
+
 							}
 							else if(Number(confirm) <=100 && Number(confirm)>10)
 							{
 								color=new Cesium.Color(255/255, 123/255,105/255, 1);
 							}
 							else{
-								
+
 								color=new Cesium.Color(255/255, 170/255,133/255, 1);
 							}
 						}
@@ -124,18 +144,18 @@
 							color=new Cesium.Color(1, 1,1,1)
 						}
 						for(var k=0;k<feature.length;k++)//读取每个面的节点信息,并存进数组
-						{						 
+						{
 												 var x=feature[k][0];
 												 var y=feature[k][1];
 												 var z=0;
 												 points.push(x);
 												 points.push(y);
-												 points.push(z);						 
+												 points.push(z);
 						}
 						if(points[0]!=undefined)//面节点异常判断
 						{
 												 var redPolygon = viewer.entities.add({//构造面实体
-													 name : name,													 
+													 name : name,
 													 polygon : {
 														 hierarchy : Cesium.Cartesian3.fromDegreesArrayHeights(points),
 														 perPositionHeight : true,
@@ -144,12 +164,12 @@
 														 outlineColor : Cesium.Color.BLACK,
 														 heightReference:Cesium.HeightReference.CLAMP_TO_GROUND
 													 }
-													 
+
 												 });
 						}
 					}
 					else
-					{						
+					{
 						var feature=polygonfeature[0];
 						var points=[];
 						var name=polygonfeatures[i].properties.COUNTRY;
@@ -163,19 +183,19 @@
 							else if(Number(confirm)>500 && Number(confirm)<=10000)
 							{
 								color=new Cesium.Color(140/255, 13/255,13/255, 1);
-								
+
 							}
 							else if(Number(confirm) <=500 && Number(confirm)>100)
 							{
 								color=new Cesium.Color(204/255, 41/255,41/255, 1);
-								
+
 							}
 							else if(Number(confirm) <=100 && Number(confirm)>10)
 							{
 								color=new Cesium.Color(255/255, 123/255,105/255, 1);
 							}
 							else{
-								
+
 								color=new Cesium.Color(255/255, 170/255,133/255, 1);
 							}
 						}
@@ -185,32 +205,32 @@
 							color=new Cesium.Color(1, 1,1,1)
 						}
 						for(var k=0;k<feature.length;k++)
-						{						 
-												 var x=feature[k][0];
-												 var y=feature[k][1];
-												 var z=0;
-												 points.push(x);
-												 points.push(y);
-												 points.push(z);
+						{
+							   var x=feature[k][0];
+							   var y=feature[k][1];
+							   var z=0;
+							   points.push(x);
+							   points.push(y);
+							   points.push(z);
 						}
 						if(points[0]!=undefined)
 						{
-												 var redPolygon = viewer.entities.add({
-													 name : name,
-													 polygon : {
-															 hierarchy : Cesium.Cartesian3.fromDegreesArrayHeights(points),
-															 perPositionHeight : true,
-															 material : color,
-															 outline:true,
-															 outlineColor : Cesium.Color.BLACK,
-															 heightReference:Cesium.HeightReference.CLAMP_TO_GROUND
+							   var redPolygon = viewer.entities.add({
+							       name : name,
+							       polygon : {
+							      		 hierarchy : Cesium.Cartesian3.fromDegreesArrayHeights(points),
+							      		 perPositionHeight : true,
+							      		 material : color,
+							      		 outline:true,
+							      		 outlineColor : Cesium.Color.BLACK,
+							      		 heightReference:Cesium.HeightReference.CLAMP_TO_GROUND
 													 }
 												 });
 						}
 					}
-					
+
 				}
-				 
+
 			 }
 		 }).otherwise(function(error) {
 		 });
@@ -219,7 +239,7 @@
 
         }
 
-    }  
+    }
 </script>
 </body>
 </html>

@@ -167,7 +167,12 @@ var exampleConfig = {
                         name_en: "Globedisease",
                         thumbnail: "terrainAndImagery.jpg",
                         fileName: "Globedisease"
-
+                    },
+                    {
+                        name: "逆行者",
+                        name_en: "DocCount",
+                        thumbnail: "terrainAndImagery.jpg",
+                        fileName: "DocCount"
                     },
                     {
                         name: "全球实时航线数据",
@@ -441,7 +446,7 @@ var exampleConfig = {
                         thumbnail: "getFeatureBySQL.jpg",
                         fileName: "getFeatureBySQL"
                     },
-                    
+
                     {
                         name: "分层分户查询",
                         name_en: "individualInformation",
@@ -495,7 +500,7 @@ var exampleConfig = {
                         name_en: "drawRect",
                         thumbnail: "drawRect.jpg",
                         fileName: "drawRect"
-                    }					
+                    }
 				]
 			},
         }
@@ -810,7 +815,7 @@ var exampleConfig = {
                         fileName: "geologicBodyVolume"
                     }
 				]
-				
+
 			},
             "animation-model": {
                 name: "动画模型",
@@ -1117,7 +1122,7 @@ var exampleConfig = {
                         fileName: "scanEffect"
                     },
                 ]
-            }, 
+            },
 			"special-effect": {
                 name: "特效",
                 name_en: "special effect",

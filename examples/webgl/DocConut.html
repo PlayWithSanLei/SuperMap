@@ -1,0 +1,166 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=Edge,chrome=1">
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, minimum-scale=1, user-scalable=no">
+    <title>全国各省支援湖北医护人员人数大屏</title>
+    <link href="../Build/Cesium/Widgets/widgets.css" rel="stylesheet">
+    <script src="./js/config.js"></script>
+    <link href="./css/pretty.css" rel="stylesheet">
+    <script src="./js/jquery.min.js"></script>
+    <script type="text/javascript" src="./js/require.min.js" data-main="js/main"></script>
+</head>
+<body>
+<div id="cesiumContainer"></div>
+<script type="text/javascript">
+    /*示范代码说明：
+     *选取一个点作为中心点，并以此做旋转
+     *
+     *主要涉及接口：
+     * camera.flyCircle
+     * camera.flyCircleLoop
+     * camera.stopFlyCircle
+     * 示范代码：
+   */
+    function onload(Cesium) {
+        var viewer = new Cesium.Viewer('cesiumContainer',{
+			navigation:false,//隐藏导航控件
+			infoBox:false,//禁止信息框
+			selectionIndicator : false//隐藏选择提示
+		});
+        var scene = viewer.scene;
+		viewer.scene.backgroundColor = new Cesium.Color(5/255, 27/255, 51/255, 255/255);//设置场景背景色
+		scene.globe.show=false;//隐藏三维球体
+		scene.sun.show=false;//隐藏太阳
+		scene.skyBox.show=false;//隐藏天空盒
+        var widget = viewer.cesiumWidget;
+        try{
+            var promise = scene.open("http://localhost:8090/iserver/services/3D-China_Province_pg/rest/realspace");//打开标签专题图服务
+            Cesium.when(promise,function(layers){//服务加载完成的回调,在回调中加载行政区划面,尾迹线和代表医护人员人数的圆圈
+				
+				Cesium.loadJson('China_Data.json').then(function(jsonData) { 
+							 
+				    var polygonfeatures=jsonData.features;//各省面要素集合
+					var color=new Cesium.Color(26/255, 59/255, 90/255, 255/255);//面颜色
+					var linecolor=new Cesium.Color(54/255, 96/255, 146/255, 255/255);//面边框线颜色
+							 for(var i=0;i<polygonfeatures.length;i++)
+							 {
+								 var polygonfeature=polygonfeatures[i].geometry.coordinates;//各省的面要素
+								for(var j=0;j<polygonfeature.length;j++)
+								{
+									if(polygonfeature.length>1)//该省矢量面由多个面对象组合而成的情况
+									{
+										var feature=polygonfeature[j][0];
+										var points=[];
+										
+										for(var k=0;k<feature.length;k++)//读取每个面的节点信息,并存进数组
+										{						 
+																 var x=feature[k][0];
+																 var y=feature[k][1];
+																 var z=0;
+																 points.push(x);
+																 points.push(y);
+																 points.push(z)					  
+										}
+										if(points[0]!=undefined)//面节点异常判断
+										{
+																 viewer.entities.add({//构造面实体											 
+																	 polygon : {
+																		 hierarchy : Cesium.Cartesian3.fromDegreesArrayHeights(points),
+																		 perPositionHeight : true,
+																		 material : color,
+																		 outline:true,
+																		 outlineColor : linecolor
+																	 }
+																	 
+																 });
+										}
+									}
+									else
+									{						
+										var feature=polygonfeature[0];
+										var points=[];
+										for(var k=0;k<feature.length;k++)
+										{						 
+																 var x=feature[k][0];
+																 var y=feature[k][1];
+																 var z=0;
+																 points.push(x);
+																 points.push(y);
+																 points.push(z);
+										}
+										if(points[0]!=undefined)
+										{
+																 viewer.entities.add({
+																	 polygon : {
+																			 hierarchy : Cesium.Cartesian3.fromDegreesArrayHeights(points),
+																			 perPositionHeight : true,
+																			 material : color,
+																			 outline:true,
+																			 outlineColor : linecolor
+																	 }
+																 });
+										}
+									}
+									
+								}
+								 
+							 }
+				}).otherwise(function(error) {
+				});
+				var ellipsecolor=new Cesium.Color(50/255, 173/255, 180/255, 100/255);//圆圈颜色
+				Cesium.loadJson('China_Doc.json').then(function(DocData) {
+					for(var i=0;i<DocData.features.length;i++)
+					{
+						var point=DocData.features[i].geometry.coordinates;//各省除湖北外的内点坐标
+						var DocCount=DocData.features[i].properties.Doc;
+						var points=[];
+						if(DocCount<200)//为了保证圆圈在小比例尺下也能看到,最小值取200
+						{
+							DocCount=200;
+						}
+						var R=parseInt(DocCount/100)*15000;//医护人员数量确定圆圈半径
+						points.push(point[0]);
+						points.push(point[1]);
+						points.push(112.866487619079);//湖北内点坐标,是固定的
+						points.push(31.1766459770616);
+						viewer.entities.add({ // 尾迹线
+						                polyline: {
+						                    width: 5,
+											hMax:100000,
+						                    positions: Cesium.Cartesian3.fromDegreesArray(points),
+						                    material: new Cesium.PolylineTrailMaterialProperty({ // 尾迹线材质
+						                        color: Cesium.Color.fromCssColorString("rgba(118, 233, 241, 1.0)"),
+						                        trailLength : 0.6,
+						                        period : 3.0
+						                    })
+						                }
+						            });
+						
+						    viewer.entities.add({//圆圈
+						    position: Cesium.Cartesian3.fromDegrees(point[0],point[1]),
+						    ellipse : {
+						        semiMinorAxis : R,
+						        semiMajorAxis : R,
+								height: 10000.0,
+						        material : ellipsecolor
+						    }
+						});
+						
+					}
+				})
+				
+			})
+        }
+        catch(e){
+            if (widget._showRenderLoopErrors) {
+                var title = '渲染时发生错误，已停止渲染。';
+                widget.showErrorPanel(title, undefined, e);
+            }
+        }
+
+    }  
+</script>
+</body>
+</html>

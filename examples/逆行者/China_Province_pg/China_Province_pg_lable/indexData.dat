@@ -1,0 +1,30 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<SuperMapCache xmlns:sml="http://www.supermap.com/SuperMapCache/vectortile">
+<FieldDefines>
+<FieldDefine Name="SmID" Type="4" Size="4" Caption="SmID" IsRequired="1"/>
+<FieldDefine Name="SmUserID" Type="4" Size="4" Caption="SmUserID" IsRequired="1"/>
+<FieldDefine Name="SmArea" Type="7" Size="8" Caption="SmArea" IsRequired="1"/>
+<FieldDefine Name="SmPerimeter" Type="7" Size="8" Caption="SmPerimeter" IsRequired="1"/>
+<FieldDefine Name="SmGeometry" Type="128" Size="0" Caption="SmGeometry" IsRequired="1"/>
+<FieldDefine Name="PAC" Type="7" Size="8" Caption="PAC" IsRequired="0"/>
+<FieldDefine Name="NAME" Type="127" Size="60" Caption="NAME" IsRequired="0"/>
+<FieldDefine Name="PINYIN" Type="127" Size="60" Caption="PINYIN" IsRequired="0"/>
+<FieldDefine Name="pop_2014" Type="4" Size="4" Caption="pop_2014" IsRequired="0"/>
+<FieldDefine Name="GDP_2014" Type="7" Size="8" Caption="GDP_2014" IsRequired="0"/>
+<FieldDefine Name="GDP_2013" Type="7" Size="8" Caption="GDP_2013" IsRequired="0"/>
+<FieldDefine Name="GDP_2012" Type="7" Size="8" Caption="GDP_2012" IsRequired="0"/>
+<FieldDefine Name="GDP_2011" Type="7" Size="8" Caption="GDP_2011" IsRequired="0"/>
+<FieldDefine Name="GDP_2010" Type="7" Size="8" Caption="GDP_2010" IsRequired="0"/>
+<FieldDefine Name="pop_2014_urban" Type="4" Size="4" Caption="pop_2014_urban" IsRequired="0"/>
+<FieldDefine Name="pop_2014_rural" Type="4" Size="4" Caption="pop_2014_rural" IsRequired="0"/>
+<FieldDefine Name="GDP_2009" Type="7" Size="8" Caption="GDP_2009" IsRequired="0"/>
+<FieldDefine Name="GDP_2008" Type="7" Size="8" Caption="GDP_2008" IsRequired="0"/>
+<FieldDefine Name="GDP_2007" Type="7" Size="8" Caption="GDP_2007" IsRequired="0"/>
+<FieldDefine Name="GDP_2006" Type="7" Size="8" Caption="GDP_2006" IsRequired="0"/>
+<FieldDefine Name="GDP_2005" Type="7" Size="8" Caption="GDP_2005" IsRequired="0"/>
+<FieldDefine Name="per_capita_GDP_2014" Type="7" Size="8" Caption="per_capita_GDP_2014" IsRequired="0"/>
+</FieldDefines>
+<sml:IndexTiles>
+<sml:MaxID>0</sml:MaxID>
+</sml:IndexTiles>
+</SuperMapCache>
